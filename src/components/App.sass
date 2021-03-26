@@ -1,0 +1,41 @@
+*
+  margin: 0
+  padding: 0
+  box-sizing: border-box
+#root
+  .app-wrapper
+    display: grid
+    grid-template-rows: 10vh 10fr 5vh
+    grid-template-columns: 1fr
+    grid-template-areas: "header" "main" "footer"
+
+.main-text
+  margin: 0 auto
+  font-size: 1.5rem
+  align-self: center
+  text-align: center
+
+a
+  text-decoration: none
+  color: black
+
+.navlink
+  padding: 5px
+  border: none
+  border-radius: 10%
+  text-align: center
+  &:hover
+    transition: all ease-in 0.1s
+    text-shadow: 0.5rem 0.5rem 15px rgba(0,0,0,0.5)
+    transform: scale(1.02)
+  &:active
+    transition: all ease-in 0.1s
+    text-shadow: 0.5rem 0.3rem 12px rgba(0,0,0,0.5)
+    transform: scale(0.9)
+  &_active
+    color: red
+    font-size: 1.5rem
+
+@import './Header/Header'
+@import './Main/Main'
+@import './Footer/Footer'

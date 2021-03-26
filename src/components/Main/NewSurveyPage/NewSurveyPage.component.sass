@@ -1,0 +1,51 @@
+.newSurveyPage
+  padding: 40px 1rem
+  width: 80%
+  display: flex
+  justify-content: space-between
+  &-newsurvey
+    width: 70%
+    h3
+      margin-bottom: 20px
+    &-container
+      border: 1px solid black
+      &-question
+        width: 90%
+        box-shadow: none
+      .question-button
+        padding: 5px 10px
+        font-size: 1rem
+
+  &-surveyParams
+    margin-top: 50px
+    width: 25%
+    &-questions
+      margin-bottom: 20px
+      width: 100%
+      box-shadow: 0.5rem 0.5rem 15px rgba(0,0,0,0.5)
+      tbody
+        tr:hover
+          cursor: pointer
+    &-parameters
+      width: 100%
+      box-shadow: 0.5rem 0.5rem 15px rgba(0,0,0,0.5)
+      .paramsInputs
+        width: 95%
+        padding: 0
+        td
+          input
+            margin: 0 10px 0 0
+            width: 20px
+            height: 20px
+            transition: all ease-in 0.1s
+            box-shadow: 0.2rem 0.2rem 10px rgba(0,0,0,0.4)
+            &:active
+              transition: all ease-in 0.1s
+              box-shadow: 0.2rem 0.2rem 5px rgba(0,0,0,0.5)
+              transform: scale(0.9)
+  thead
+    tr
+      th
+        &:first-child
+          width: 100%
+          text-align: center
