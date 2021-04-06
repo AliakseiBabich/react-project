@@ -44,17 +44,25 @@ const useRoutes = props => {
           render={() => (
             <>
               <Navigation />
-              <NewSurveyPage surveyParameters={props.inputs.newSurveyParamTypes}/>
+              <NewSurveyPage
+                surveyParameters={props.inputs.newSurveyParamTypes} surveyQuestionTypes={props.inputs.newSurveyQuestionTypes}
+              />
             </>
           )}
         ></Route>
         <Route path="/home/my_surveys">
           <Navigation />
-          <MySurveysPage />
+          <MySurveysPage
+            tableHeaders={props.tableHeaders.mySurveysTable}
+            mockupData={props.mockups.mySurveysTableContentMockup}
+          />
         </Route>
         <Route path="/home/users">
           <Navigation />
-          <UsersPage />
+          <UsersPage
+            tableHeaders={props.tableHeaders.usersTable}
+            mockupData={props.mockups.usersTableContentData}
+          />
         </Route>
         <Redirect from="/login" to="/home" />
       </Switch>

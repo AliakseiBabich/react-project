@@ -1,34 +1,12 @@
 import React, { useState } from 'react';
 import Form from '../Form/Form.component';
 import Table from '../Table/Table.component';
+import NewSurveyQuestionForm from '../NewSurveyQuestionForm/NewSurveyQuestionForm.component';
+import cloneDeep from 'lodash/cloneDeep';
 
 const questionsStore = [];
 
 const NewSurveyPage = props => {
-  const questionTypes = [
-    'Варианты ответа (один)',
-    'Варианты ответа (несколько)',
-    'Текст',
-    'Файл',
-    'Рейтинг в звездах',
-    'Шкала'
-  ];
-
-  const questionBtns = [
-    {
-      value: 'Сохранить',
-      type: 'submit',
-      className: 'question-button',
-      onClick: () => {}
-    },
-    {
-      value: 'Отмена',
-      type: 'submit',
-      className: 'question-button',
-      onClick: () => {}
-    }
-  ];
-
   const formState = {
     anonimous: false,
     show_q_number: false,
@@ -38,42 +16,74 @@ const NewSurveyPage = props => {
     indicator: false
   };
 
-  const [questionsState, addQuestion] = useState(questionsStore);
-
-  const questions = questionsState.map((q, i) => {
-    return (
-      <Form
-        header={q.name}
-        key={i}
-        buttons={questionBtns}
-        className="newSurveyPage-newsurvey-container-question"
-      ></Form>
-    );
-  });
+  const [questionState, addNewQuestion] = useState([]);
+  const [questionText, updateQuestionText] = useState({});
+  const [inputsState, addNewInput] = useState([]);
+  const [inputText, updateInputText] = useState();
 
   const handleQuestionTypeClick = e => {
     e.preventDefault();
-    const questions = [...questionsState];
-    questions.push({ name: e.target.innerText });
-    addQuestion(questions);
+    const question = cloneDeep(questionState);
+    cloneDeep(props.surveyQuestionTypes).map(q => {
+      if (q.name === e.target.innerText) {
+        question[0] = q;
+      }
+    });
+    addNewQuestion(question);
   };
+
+  const handleQuestionInput = e => {
+    const { id, value } = e.target;
+    updateQuestionText(prevState => ({
+      ...prevState,
+      [id]: value
+    }));
+  };
+
+  const handleQuestionInputSubmit = e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const question = cloneDeep(questionState);
+      const inputs = cloneDeep(inputsState);
+      question.map(q => {
+        q.questionName = questionText[q.id];
+        inputs.type = q.type;
+        q.inputs = inputs;
+      });
+      addNewQuestion(question);
+      updateQuestionText({});
+    }
+  };
+
+  const newQuestion = questionState.map((q, i) => {
+    return (
+      <NewSurveyQuestionForm
+        newQuestionInfo={q}
+        key={i}
+        className="question-form"
+        questionText={questionText}
+        onQuestionInputChange={handleQuestionInput}
+        onQuestionInputSubmit={handleQuestionInputSubmit}
+      />
+    );
+  });
 
   return (
     <div className="newSurveyPage">
       <div className="newSurveyPage-newsurvey">
         <h3>Новый опрос</h3>
-        <div className="newSurveyPage-newsurvey-container">{questions}</div>
+        <div className="newSurveyPage-newsurvey-container">{newQuestion}</div>
       </div>
       <div className="newSurveyPage-surveyParams">
         <Table
           className="newSurveyPage-surveyParams-questions"
-          headerData={['Тип вопроса']}
-          contentData={questionTypes}
+          headerData={{ name: 'Тип вопроса' }}
+          contentData={props.surveyQuestionTypes}
           onClick={handleQuestionTypeClick}
-        ></Table>
+        />
         <Table
           className="newSurveyPage-surveyParams-parameters"
-          headerData={['Параметры опроса']}
+          headerData={{ name: 'Параметры опроса' }}
         >
           <Form
             className="newSurveyPage-surveyParams-parameters-list"

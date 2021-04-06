@@ -3,29 +3,8 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 const Header = props => {
-  const switchEnterTitle = () => {
-    if (!props.isAuthenticated) {
-      return (
-        <NavLink
-          to="/login"
-          className="navlink"
-          activeClassName="navlink_active"
-        >
-          Вход
-        </NavLink>
-      );
-    } else {
-      return (
-        <NavLink
-          to="/home"
-          className="navlink"
-          activeClassName="navlink_active"
-        >
-          Привет, admin
-        </NavLink>
-      );
-    }
-  };
+  const linkTo = props.isAuthenticated ? '/home' : '/login';
+  const linkText = props.isAuthenticated ? 'Привет, admin' : 'Вход';
   return (
     <header className="header">
       <NavLink exact={true} to="/" className="header-logo">
@@ -44,7 +23,13 @@ const Header = props => {
         >
           О компании
         </NavLink>
-        {switchEnterTitle()}
+        <NavLink
+          to={linkTo}
+          className="navlink"
+          activeClassName="navlink_active"
+        >
+          {linkText}
+        </NavLink>
       </nav>
     </header>
   );

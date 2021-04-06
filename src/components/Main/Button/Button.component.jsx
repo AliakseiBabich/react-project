@@ -1,12 +1,10 @@
 import React from 'react';
+import classNames from 'classnames';
 
 const Button = props => {
+  const btnClass = classNames(`button`, props.className);
   return (
-    <button
-      onClick={props.onClick}
-      type={props.type}
-      className={props.className ? `button ${props.className}` : `button`}
-    >
+    <button onClick={props.onClick} type={props.type} className={btnClass}>
       {props.value}
     </button>
   );

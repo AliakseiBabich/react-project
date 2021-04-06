@@ -10,7 +10,12 @@ const App = props => {
   return (
     <div className="app-wrapper">
       <Header isAuthenticated={isAuthenticated} />
-      <Main isAuthenticated={isAuthenticated} inputs={props.inputs} />
+      <Main
+        isAuthenticated={isAuthenticated}
+        inputs={props.inputs}
+        tableHeaders={props.tableHeaders}
+        mockups={props.mockups}
+      />
       <Footer />
     </div>
   );

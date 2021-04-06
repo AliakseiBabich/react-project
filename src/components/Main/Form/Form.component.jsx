@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import Button from '../Button/Button.component';
 import Input from '../Input/Input.component';
+import classNames from 'classnames';
 
 const Form = props => {
+  const formClass = classNames(`form-container`, props.className);
+
   const [state, setState] = useState(props.state);
 
   const handleChange = e => {
@@ -22,9 +25,10 @@ const Form = props => {
         const inputItem = (
           <Input
             {...input}
-            key={input.id ? input.id : null}
+            key={input.id}
             value={input.state ? input.state[input.id] : state[input.id]}
             onChange={handleChange}
+            className={input.className}
           />
         );
         if (props.header === 'Параметры опроса') {
@@ -51,13 +55,7 @@ const Form = props => {
     return <tbody>{inputs}</tbody>;
   } else {
     return (
-      <form
-        className={
-          props.className
-            ? `form-container ${props.className}`
-            : 'form-container'
-        }
-      >
+      <form className={formClass}>
         <h2 className="form-container-header">{props.header}</h2>
         {inputs}
         {props.children}

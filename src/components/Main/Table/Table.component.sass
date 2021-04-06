@@ -7,6 +7,11 @@
   thead
     tr
       th
+        cursor: pointer
+        user-select: none
+        &:not(:first-child, :last-child):hover
+          border-left: 1px solid black
+          border-right: 1px solid black
         &:first-child
           width: 30%
           text-align: left
