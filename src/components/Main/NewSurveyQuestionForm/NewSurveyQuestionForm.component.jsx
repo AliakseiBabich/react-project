@@ -2,66 +2,75 @@ import React, { useState } from 'react';
 import Button from '../Button/Button.component';
 import Input from '../Input/Input.component';
 import classNames from 'classnames';
+import ReactStars from 'react-rating-stars-component';
 
 const NewSurveyQuestionForm = props => {
   const questionFormClass = classNames(props.className);
 
-  const questionFormBtns = [
-    {
-      value: 'Сохранить',
-      type: 'submit',
-      className: 'question-button',
-      onClick: () => {}
-    },
-    {
-      value: 'Отмена',
-      type: 'submit',
-      className: 'question-button',
-      onClick: () => {}
-    }
-  ];
+  let answers = [];
 
-  const handleSave = e => {
-    e.preventDefault();
-  };
-
-  const handleCancel = e => {
-    e.preventDefault();
-  };
-
-  // const inputs = props.inputs
-  //   ? props.inputs.map(input => {
-  //       const inputItem = (
-  //         <Input
-  //           {...input}
-  //           key={input.id}
-  //           value={
-  //             input.state
-  //               ? input.state[input.id]
-  //               : props.questionBodyState[input.id]
-  //           }
-  //           onChange={props.onChange}
-  //           className={input.className}
-  //         />
-  //       );
-  //       return inputItem;
-  //     })
-  //   : null;
-
-  const inputs = () => {
-    if (props.newQuestionInfo.inputs) {
-      const type = props.newQuestionInfo.inputs.type;
-      if (type === 'text') {
-        return <textarea></textarea>;
-      } else if (type === 'file') {
-        return <Input type={type}></Input>;
+  if (props.newQuestionInfo.answers) {
+    const type = props.newQuestionInfo.type;
+    if (type === 'radio' || type === 'checkbox') {
+      if (props.newQuestionInfo.answers.length > 0) {
+        props.newQuestionInfo.answers.map((a, i) => {
+          const id = i + 1;
+          answers.push(
+            <div key={id} className={`${questionFormClass}-answers-wrapper`}>
+              <Input
+                type={type}
+                id={id}
+                className={`${questionFormClass}-${type}-input`}
+              />
+              <label htmlFor={id}>{a.answer}</label>
+            </div>
+          );
+        });
       }
+      answers.push(
+        <div className={`${questionFormClass}-answers-wrapper`} key={type}>
+          <Input
+            type={type}
+            id={type}
+            className={`${questionFormClass}-${type}-input`}
+          />
+          <Input
+            type="text"
+            value={props.inputText[`${type}-input`]}
+            id={`${type}-input`}
+            placeholder="введите вариант ответа"
+            onChange={props.onInputChange}
+            onSubmit={props.onInputSubmit}
+          />
+        </div>
+      );
+    } else if (type === 'text') {
+      answers = <textarea></textarea>;
+    } else if (type === 'file') {
+      answers = (
+        <Input type={type} className={`${questionFormClass}-${type}-input`} />
+      );
+    } else if (type === 'rating') {
+      answers = <ReactStars size={24}></ReactStars>;
+    } else if (type === 'range') {
+      answers = (
+        <Input type={type} className={`${questionFormClass}-${type}-input`} />
+      );
     }
-  };
+  }
 
-  const buttons = questionFormBtns.map(btn => {
-    return <Button {...btn} key={btn.value ? btn.value : null} />;
-  });
+  const buttons = props.btns
+    ? props.btns.map(btn => {
+        return (
+          <Button
+            {...btn}
+            key={btn.value ? btn.value : null}
+            className={`${questionFormClass}-question-btn`}
+            onClick={btn.onClick}
+          />
+        );
+      })
+    : null;
 
   const qHead = () => {
     if (props.newQuestionInfo.questionName) {
@@ -73,9 +82,9 @@ const NewSurveyQuestionForm = props => {
     } else {
       return (
         <Input
-          value={props.questionText[props.newQuestionInfo.id]}
-          onChange={props.onQuestionInputChange}
-          onSubmit={props.onQuestionInputSubmit}
+          value={props.inputText[props.newQuestionInfo.id]}
+          onChange={props.onInputChange}
+          onSubmit={props.onInputSubmit}
           id={props.newQuestionInfo.id}
           placeholder="введите ваш вопрос"
           type="text"
@@ -88,8 +97,7 @@ const NewSurveyQuestionForm = props => {
   return (
     <form className={questionFormClass}>
       {qHead()}
-      {inputs()}
-      {props.children}
+      {answers}
       <div className={`${questionFormClass}-buttons-wrapper`}>{buttons}</div>
     </form>
   );

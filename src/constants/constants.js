@@ -90,7 +90,7 @@ export const INPUTS = {
       name: 'Варианты ответа (один)'
     },
     {
-      type: 'ckeckbox',
+      type: 'checkbox',
       id: 'mult_var',
       name: 'Варианты ответа (несколько)'
     },
@@ -101,7 +101,7 @@ export const INPUTS = {
     },
     { type: 'file', id: 'file', name: 'Файл' },
     {
-      type: null,
+      type: 'rating',
       id: 'rating',
       name: 'Рейтинг в звездах'
     },

@@ -4,8 +4,6 @@ import Table from '../Table/Table.component';
 import NewSurveyQuestionForm from '../NewSurveyQuestionForm/NewSurveyQuestionForm.component';
 import cloneDeep from 'lodash/cloneDeep';
 
-const questionsStore = [];
-
 const NewSurveyPage = props => {
   const formState = {
     anonimous: false,
@@ -17,9 +15,7 @@ const NewSurveyPage = props => {
   };
 
   const [questionState, addNewQuestion] = useState([]);
-  const [questionText, updateQuestionText] = useState({});
-  const [inputsState, addNewInput] = useState([]);
-  const [inputText, updateInputText] = useState();
+  const [inputText, updateInputText] = useState({});
 
   const handleQuestionTypeClick = e => {
     e.preventDefault();
@@ -32,28 +28,64 @@ const NewSurveyPage = props => {
     addNewQuestion(question);
   };
 
-  const handleQuestionInput = e => {
+  const handleInput = e => {
     const { id, value } = e.target;
-    updateQuestionText(prevState => ({
+    updateInputText(prevState => ({
       ...prevState,
       [id]: value
     }));
   };
 
-  const handleQuestionInputSubmit = e => {
+  const handleInputSubmit = e => {
     if (e.key === 'Enter') {
       e.preventDefault();
       const question = cloneDeep(questionState);
-      const inputs = cloneDeep(inputsState);
       question.map(q => {
-        q.questionName = questionText[q.id];
-        inputs.type = q.type;
-        q.inputs = inputs;
+        if (e.target.id === q.id) {
+          q.questionName = inputText[q.id];
+          q.answers = [];
+        } else {
+          q.answers.push({ answer: e.target.value });
+        }
       });
       addNewQuestion(question);
-      updateQuestionText({});
+      updateInputText({});
     }
   };
+
+  const handleSave = e => {
+    e.preventDefault();
+    if (!questionState[0].questionName) {
+      alert('Введите вопрос');
+    } else if (
+      (questionState[0].type === 'radio' ||
+        questionState[0].type === 'checkbox') &&
+      questionState[0].answers.length < 2
+    ) {
+      alert('Добавьте ещё один вариант ответа');
+    } else {
+      console.log('saved');
+    }
+  };
+
+  const handleCancel = e => {
+    e.preventDefault();
+  };
+
+  const questionFormBtns = [
+    {
+      value: 'Сохранить',
+      type: 'submit',
+      className: 'question-button',
+      onClick: handleSave
+    },
+    {
+      value: 'Отмена',
+      type: 'submit',
+      className: 'question-button',
+      onClick: handleCancel
+    }
+  ];
 
   const newQuestion = questionState.map((q, i) => {
     return (
@@ -61,9 +93,10 @@ const NewSurveyPage = props => {
         newQuestionInfo={q}
         key={i}
         className="question-form"
-        questionText={questionText}
-        onQuestionInputChange={handleQuestionInput}
-        onQuestionInputSubmit={handleQuestionInputSubmit}
+        inputText={inputText}
+        btns={questionFormBtns}
+        onInputChange={handleInput}
+        onInputSubmit={handleInputSubmit}
       />
     );
   });
