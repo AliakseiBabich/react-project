@@ -12,21 +12,19 @@ const NewSurveyQuestionForm = props => {
   if (props.newQuestionInfo.answers) {
     const type = props.newQuestionInfo.type;
     if (type === 'radio' || type === 'checkbox') {
-      if (props.newQuestionInfo.answers.length > 0) {
-        props.newQuestionInfo.answers.map((a, i) => {
-          const id = i + 1;
-          answers.push(
-            <div key={id} className={`${questionFormClass}-answers-wrapper`}>
-              <Input
-                type={type}
-                id={id}
-                className={`${questionFormClass}-${type}-input`}
-              />
-              <label htmlFor={id}>{a.answer}</label>
-            </div>
-          );
-        });
-      }
+      props.newQuestionInfo.answers?.map((a, i) => {
+        const id = i + 1;
+        answers.push(
+          <div key={id} className={`${questionFormClass}-answers-wrapper`}>
+            <Input
+              type={type}
+              id={id}
+              className={`${questionFormClass}-${type}-input`}
+            />
+            <label htmlFor={id}>{a.answer}</label>
+          </div>
+        );
+      });
       answers.push(
         <div className={`${questionFormClass}-answers-wrapper`} key={type}>
           <Input

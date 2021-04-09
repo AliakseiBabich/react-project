@@ -55,12 +55,12 @@ const NewSurveyPage = props => {
 
   const handleSave = e => {
     e.preventDefault();
-    if (!questionState[0].questionName) {
+    const { type, questionName, answers } = questionState[0];
+    if (!questionName) {
       alert('Введите вопрос');
     } else if (
-      (questionState[0].type === 'radio' ||
-        questionState[0].type === 'checkbox') &&
-      questionState[0].answers.length < 2
+      (type === 'radio' || type === 'checkbox') &&
+      answers.length < 2
     ) {
       alert('Добавьте ещё один вариант ответа');
     } else {
