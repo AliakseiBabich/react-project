@@ -6,7 +6,7 @@ import Main from './Main/Main';
 import Footer from './Footer/Footer';
 
 const App = props => {
-  const isAuthenticated = true;
+  const isAuthenticated = false;
   return (
     <div className="app-wrapper">
       <Header isAuthenticated={isAuthenticated} />

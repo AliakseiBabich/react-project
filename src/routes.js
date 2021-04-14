@@ -45,7 +45,8 @@ const useRoutes = props => {
             <>
               <Navigation />
               <NewSurveyPage
-                surveyParameters={props.inputs.newSurveyParamTypes} surveyQuestionTypes={props.inputs.newSurveyQuestionTypes}
+                surveyParameters={props.inputs.newSurveyParamTypes}
+                surveyQuestionTypes={props.inputs.newSurveyQuestionTypes}
               />
             </>
           )}
@@ -74,7 +75,12 @@ const useRoutes = props => {
       <Route exact path="/about" render={() => <About />} />
       <Route
         path="/login"
-        render={() => <Login loginInputs={props.inputs.login} />}
+        render={() => (
+          <Login
+            loginInputs={props.inputs.login}
+            isAuthenticated={props.isAuthenticated}
+          />
+        )}
       />
       <Route
         path="/register"

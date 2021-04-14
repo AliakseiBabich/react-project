@@ -5,6 +5,7 @@ import NewSurveyQuestionForm from '../NewSurveyQuestionForm/NewSurveyQuestionFor
 import cloneDeep from 'lodash/cloneDeep';
 import Input from '../Input/Input.component';
 import Button from '../Button/Button.component';
+import { classNames } from 'classnames';
 
 const NewSurveyPage = props => {
   const formState = {
@@ -16,11 +17,13 @@ const NewSurveyPage = props => {
     indicator: false
   };
 
-  const [surveyState, updateSurveyState] = useState({
+  const initSurveyState = {
     name: '',
-    id: 's-header',
+    id: 'survey-name',
     questions: []
-  });
+  };
+
+  const [surveyState, updateSurveyState] = useState(initSurveyState);
   const [questionState, updateQuestionState] = useState({});
   const [inputText, updateInputText] = useState({});
 
@@ -62,7 +65,28 @@ const NewSurveyPage = props => {
     }
   };
 
-  const handleQeustionSave = e => {
+  const handleSurveySave = e => {
+    e.preventDefault();
+    const questions = surveyState.questions;
+    const value = e.target.innerText;
+    if (questions.length === 0) {
+      alert('Добавьте и сохраните хотя бы один вопрос');
+    } else {
+      const survey = cloneDeep(surveyState);
+      survey.id = survey.name.split(' ').join('_');
+      if (value === 'Сохранить') {
+        localStorage.setItem(`survey: ${survey.id}`, JSON.stringify(survey));
+      } else {
+        localStorage.setItem(
+          `survey_draft: ${survey.id}`,
+          JSON.stringify(survey)
+        );
+      }
+    }
+    console.log(Object.keys(localStorage));
+  };
+
+  const handleQuestionSave = e => {
     e.preventDefault();
     const { type, questionName, answers } = questionState;
     if (!questionName) {
@@ -80,13 +104,16 @@ const NewSurveyPage = props => {
       updateSurveyState(survey);
       question = {};
       updateQuestionState(question);
-      console.log(survey);
-      console.log(e.target.value, e.target.className);
     }
   };
 
-  const handleQuestionCancel = e => {
+  const handleCancel = e => {
     e.preventDefault();
+    if (e.target.className.includes('header')) {
+      let survey = cloneDeep(surveyState);
+      survey = initSurveyState;
+      updateSurveyState(survey);
+    }
     let question = cloneDeep(questionState);
     question = {};
     updateQuestionState(question);
@@ -98,19 +125,19 @@ const NewSurveyPage = props => {
         value: 'Сохранить',
         type: 'submit',
         className: 'header-button',
-        onClick: handleQeustionSave
+        onClick: handleSurveySave
       },
       {
         value: 'Сохранить как шаблон',
         type: 'submit',
         className: 'header-button',
-        onClick: handleQeustionSave
+        onClick: handleSurveySave
       },
       {
         value: 'Отмена',
         type: 'submit',
         className: 'header-button',
-        onClick: handleQuestionCancel
+        onClick: handleCancel
       }
     ],
     questionFormBtns: [
@@ -118,13 +145,13 @@ const NewSurveyPage = props => {
         value: 'Сохранить',
         type: 'submit',
         className: 'question-button',
-        onClick: handleQeustionSave
+        onClick: handleQuestionSave
       },
       {
         value: 'Отмена',
         type: 'submit',
         className: 'question-button',
-        onClick: handleQuestionCancel
+        onClick: handleCancel
       }
     ]
   };
