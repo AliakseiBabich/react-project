@@ -3,6 +3,8 @@ import Form from '../Form/Form.component';
 import Table from '../Table/Table.component';
 import NewSurveyQuestionForm from '../NewSurveyQuestionForm/NewSurveyQuestionForm.component';
 import cloneDeep from 'lodash/cloneDeep';
+import Input from '../Input/Input.component';
+import Button from '../Button/Button.component';
 
 const NewSurveyPage = props => {
   const formState = {
@@ -14,18 +16,23 @@ const NewSurveyPage = props => {
     indicator: false
   };
 
-  const [questionState, addNewQuestion] = useState([]);
+  const [surveyState, updateSurveyState] = useState({
+    name: '',
+    id: 's-header',
+    questions: []
+  });
+  const [questionState, updateQuestionState] = useState({});
   const [inputText, updateInputText] = useState({});
 
   const handleQuestionTypeClick = e => {
     e.preventDefault();
-    const question = cloneDeep(questionState);
+    let question = cloneDeep(questionState);
     cloneDeep(props.surveyQuestionTypes).map(q => {
       if (q.name === e.target.innerText) {
-        question[0] = q;
+        question = q;
       }
     });
-    addNewQuestion(question);
+    updateQuestionState(question);
   };
 
   const handleInput = e => {
@@ -40,22 +47,24 @@ const NewSurveyPage = props => {
     if (e.key === 'Enter') {
       e.preventDefault();
       const question = cloneDeep(questionState);
-      question.map(q => {
-        if (e.target.id === q.id) {
-          q.questionName = inputText[q.id];
-          q.answers = [];
-        } else {
-          q.answers.push({ answer: e.target.value });
-        }
-      });
-      addNewQuestion(question);
+      const survey = cloneDeep(surveyState);
+      if (e.target.id === question.id) {
+        question.questionName = inputText[question.id];
+        question.answers = [];
+      } else if (e.target.id === survey.id) {
+        survey.name = inputText[survey.id];
+        updateSurveyState(survey);
+      } else {
+        question.answers.push({ answer: e.target.value });
+      }
+      updateQuestionState(question);
       updateInputText({});
     }
   };
 
-  const handleSave = e => {
+  const handleQeustionSave = e => {
     e.preventDefault();
-    const { type, questionName, answers } = questionState[0];
+    const { type, questionName, answers } = questionState;
     if (!questionName) {
       alert('Введите вопрос');
     } else if (
@@ -64,48 +73,133 @@ const NewSurveyPage = props => {
     ) {
       alert('Добавьте ещё один вариант ответа');
     } else {
-      console.log('saved');
+      let question = cloneDeep(questionState);
+      const survey = cloneDeep(surveyState);
+      question.id = `q-${survey.length + 1}`;
+      survey.questions.push(question);
+      updateSurveyState(survey);
+      question = {};
+      updateQuestionState(question);
+      console.log(survey);
+      console.log(e.target.value, e.target.className);
     }
   };
 
-  const handleCancel = e => {
+  const handleQuestionCancel = e => {
     e.preventDefault();
+    let question = cloneDeep(questionState);
+    question = {};
+    updateQuestionState(question);
   };
 
-  const questionFormBtns = [
-    {
-      value: 'Сохранить',
-      type: 'submit',
-      className: 'question-button',
-      onClick: handleSave
-    },
-    {
-      value: 'Отмена',
-      type: 'submit',
-      className: 'question-button',
-      onClick: handleCancel
-    }
-  ];
+  const buttonsData = {
+    surveyBtns: [
+      {
+        value: 'Сохранить',
+        type: 'submit',
+        className: 'header-button',
+        onClick: handleQeustionSave
+      },
+      {
+        value: 'Сохранить как шаблон',
+        type: 'submit',
+        className: 'header-button',
+        onClick: handleQeustionSave
+      },
+      {
+        value: 'Отмена',
+        type: 'submit',
+        className: 'header-button',
+        onClick: handleQuestionCancel
+      }
+    ],
+    questionFormBtns: [
+      {
+        value: 'Сохранить',
+        type: 'submit',
+        className: 'question-button',
+        onClick: handleQeustionSave
+      },
+      {
+        value: 'Отмена',
+        type: 'submit',
+        className: 'question-button',
+        onClick: handleQuestionCancel
+      }
+    ]
+  };
 
-  const newQuestion = questionState.map((q, i) => {
+  const surveyBtns = buttonsData.surveyBtns.map(btn => {
     return (
-      <NewSurveyQuestionForm
-        newQuestionInfo={q}
-        key={i}
-        className="question-form"
-        inputText={inputText}
-        btns={questionFormBtns}
-        onInputChange={handleInput}
-        onInputSubmit={handleInputSubmit}
+      <Button
+        {...btn}
+        key={btn.value ? btn.value : null}
+        className={btn.className}
+        onClick={btn.onClick}
       />
     );
   });
 
+  const sHead = () => {
+    if (surveyState.name) {
+      return (
+        <>
+          <div className="header-wrapper">
+            <h3>Новый опрос:</h3>
+            <h2>{surveyState.name}</h2>
+          </div>
+          <div className="header-wrapper-btns">{surveyBtns}</div>
+        </>
+      );
+    } else {
+      return (
+        <div className="header-wrapper">
+          <h3>Новый опрос:</h3>
+          <Input
+            value={inputText[surveyState.id]}
+            onChange={handleInput}
+            onSubmit={handleInputSubmit}
+            id={surveyState.id}
+            placeholder="введите название опроса"
+            type="text"
+            className={`${surveyState.id}-input`}
+          />
+        </div>
+      );
+    }
+  };
+
+  const survey = surveyState.questions.map((q, i) => {
+    return (
+      <NewSurveyQuestionForm
+        newQuestionInfo={q}
+        key={i}
+        className="question-saved"
+      />
+    );
+  });
+
+  const newQuestion = (
+    <NewSurveyQuestionForm
+      newQuestionInfo={questionState}
+      className="question-form"
+      inputText={inputText}
+      btns={buttonsData.questionFormBtns}
+      onInputChange={handleInput}
+      onInputSubmit={handleInputSubmit}
+    />
+  );
+
   return (
     <div className="newSurveyPage">
       <div className="newSurveyPage-newsurvey">
-        <h3>Новый опрос</h3>
-        <div className="newSurveyPage-newsurvey-container">{newQuestion}</div>
+        <div className="newSurveyPage-newsurvey-header-container">
+          {sHead()}
+        </div>
+        <div className="newSurveyPage-newsurvey-survey-container">
+          {survey}
+          {newQuestion}
+        </div>
       </div>
       <div className="newSurveyPage-surveyParams">
         <Table

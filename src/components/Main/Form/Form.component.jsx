@@ -34,7 +34,7 @@ const Form = props => {
         if (props.header === 'Параметры опроса') {
           return (
             <tr key={input.id ? input.id : null} className="paramsInputs">
-              <td>
+              <td className="paramsInputs-item-wrapper">
                 {inputItem}
                 <label htmlFor={input.id}>{input.name}</label>
               </td>
