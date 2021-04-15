@@ -36,19 +36,26 @@ const Table = props => {
           let cells = [];
           if (typeof c === 'object') {
             Object.entries(c).map(item => {
-              if (
-                item[0] !== 'id' &&
-                item[0] !== 'type' &&
-                item[0] !== 'className'
-              ) {
-                cells.push(
-                  <td
-                    key={item[0]}
-                    onClick={props.onClick ? props.onClick : null}
-                  >
-                    {item[1]}
-                  </td>
-                );
+              console.log(item);
+              switch (item[0]) {
+                case 'id':
+                case 'type':
+                case 'className':
+                case 'question':
+                  break;
+                case 'name':
+                  cells.push(
+                    <td
+                      key={item[0]}
+                      onClick={props.onClick ? props.onClick : null}
+                    >
+                      {item[1]}
+                    </td>
+                  );
+                  break;
+                case 'saveDate':
+                  cells.push(<td key={item[0]}>{item[1]}</td>);
+                  break;
               }
             });
           } else {

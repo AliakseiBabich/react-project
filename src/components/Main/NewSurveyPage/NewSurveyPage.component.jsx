@@ -74,6 +74,11 @@ const NewSurveyPage = props => {
     } else {
       const survey = cloneDeep(surveyState);
       survey.id = survey.name.split(' ').join('_');
+      const date = new Date();
+      survey.saveDate = `${date.getDate()}.${
+        date.getMonth() + 1
+      }.${date.getFullYear()}`;
+      console.log(survey.saveDate);
       if (value === 'Сохранить') {
         localStorage.setItem(`survey: ${survey.id}`, JSON.stringify(survey));
       } else {
@@ -83,14 +88,13 @@ const NewSurveyPage = props => {
         );
       }
     }
-    console.log(Object.keys(localStorage));
   };
 
   const handleQuestionSave = e => {
     e.preventDefault();
     const { type, questionName, answers } = questionState;
     if (!questionName) {
-      alert('Введите вопрос');
+      alert('Введите вопрос и нажмите Enter');
     } else if (
       (type === 'radio' || type === 'checkbox') &&
       answers.length < 2
@@ -99,7 +103,7 @@ const NewSurveyPage = props => {
     } else {
       let question = cloneDeep(questionState);
       const survey = cloneDeep(surveyState);
-      question.id = `q-${survey.length + 1}`;
+      question.id = `q-${survey.questions.length + 1}`;
       survey.questions.push(question);
       updateSurveyState(survey);
       question = {};
