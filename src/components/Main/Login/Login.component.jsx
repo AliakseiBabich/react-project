@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import Form from '../Form/Form.component';
+import { cloneDeep } from 'lodash/cloneDeep';
 
 const Login = props => {
   const initLoginstate = {
@@ -27,7 +28,10 @@ const Login = props => {
       const user = localStorage.getItem(email);
       if (user) {
         if (JSON.parse(user).password === password) {
-          console.log(props.isAuthenticated);
+          console.log();
+          const auth = { isAuthenticated: true };
+          props.handleAuth(auth);
+          localStorage.setItem('auth', JSON.stringify(auth));
         } else {
           alert('Введен неправильный пароль, пожалуйста, попробуйте снова');
         }

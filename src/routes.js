@@ -30,7 +30,7 @@ const useRoutes = props => {
     );
   };
 
-  if (props.isAuthenticated) {
+  if (props.authState.isAuthenticated || localStorage.getItem('auth')) {
     return (
       <Switch>
         {mainText()}
@@ -78,7 +78,8 @@ const useRoutes = props => {
         render={() => (
           <Login
             loginInputs={props.inputs.login}
-            isAuthenticated={props.isAuthenticated}
+            authState={props.authState}
+            handleAuth={props.handleAuth}
           />
         )}
       />
