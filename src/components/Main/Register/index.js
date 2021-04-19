@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Form from '../Form/Form.component';
+import Form from '../Form';
 
 const RegisterForm = props => {
   const initRegisterState = {

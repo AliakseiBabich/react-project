@@ -1,13 +1,13 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import About from './components/Main/About/About';
-import Login from './components/Main/Login/Login.component';
-import RegisterForm from './components/Main/Register/Register.component';
-import Navigation from './components/Main/Navigation/Navigation.component';
-import Panel from './components/Main/Panel/Panel.component';
-import UsersPage from './components/Main/UsersPage/UsersPage.component';
-import MySurveysPage from './components/Main/MySurveysPage/MySurveysPage.component';
-import NewSurveyPage from './components/Main/NewSurveyPage/NewSurveyPage.component';
+import About from './components/Main/About';
+import Login from './components/Main/Login';
+import RegisterForm from './components/Main/Register';
+import Navigation from './components/Main/Navigation';
+import Panel from './components/Main/Panel';
+import UsersPage from './components/Main/UsersPage';
+import MySurveysPage from './components/Main/MySurveysPage';
+import NewSurveyPage from './components/Main/NewSurveyPage';
 
 const useRoutes = props => {
   const mainText = () => {

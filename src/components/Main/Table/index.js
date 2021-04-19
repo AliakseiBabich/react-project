@@ -36,7 +36,6 @@ const Table = props => {
           let cells = [];
           if (typeof c === 'object') {
             Object.entries(c).map(item => {
-              console.log(item);
               switch (item[0]) {
                 case 'id':
                 case 'type':

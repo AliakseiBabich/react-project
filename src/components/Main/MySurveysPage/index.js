@@ -1,5 +1,5 @@
 import React from 'react';
-import Table from '../Table/Table.component';
+import Table from '../Table';
 
 const MySurveysPage = props => {
   const surveys = Object.entries(localStorage)?.reduce((acc, entry) => {

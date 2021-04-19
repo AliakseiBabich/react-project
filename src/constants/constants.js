@@ -82,36 +82,37 @@ export const INPUTS = {
       name: 'Индикатор выполнения',
       className: 'paramType-input'
     }
-  ],
-  newSurveyQuestionTypes: [
-    {
-      type: 'radio',
-      id: 'one_var',
-      name: 'Варианты ответа (один)'
-    },
-    {
-      type: 'checkbox',
-      id: 'mult_var',
-      name: 'Варианты ответа (несколько)'
-    },
-    {
-      type: 'text',
-      id: 'text',
-      name: 'Текст'
-    },
-    { type: 'file', id: 'file', name: 'Файл' },
-    {
-      type: 'rating',
-      id: 'rating',
-      name: 'Рейтинг в звездах'
-    },
-    {
-      type: 'range',
-      id: 'scale',
-      name: 'Шкала'
-    }
   ]
 };
+
+export const newSurveyQuestionTypes = [
+  {
+    type: 'radio',
+    id: 'one_var',
+    name: 'Варианты ответа (один)'
+  },
+  {
+    type: 'checkbox',
+    id: 'mult_var',
+    name: 'Варианты ответа (несколько)'
+  },
+  {
+    type: 'text',
+    id: 'text',
+    name: 'Текст'
+  },
+  { type: 'file', id: 'file', name: 'Файл' },
+  {
+    type: 'rating',
+    id: 'rating',
+    name: 'Рейтинг в звездах'
+  },
+  {
+    type: 'range',
+    id: 'scale',
+    name: 'Шкала'
+  }
+];
 
 export const TABLE_HEADERS = {
   usersTable: {

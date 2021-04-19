@@ -1,34 +1,18 @@
 import React, { useState } from 'react';
-import Button from '../Button/Button.component';
-import Input from '../Input/Input.component';
+import Button from '../Button';
+import Input from '../Input';
 import classNames from 'classnames';
 
 const Form = props => {
   const formClass = classNames(`form-container`, props.className);
-
-  const [state, setState] = useState(props.state);
-
-  const handleChange = e => {
-    const { id, value } = e.target;
-    setState(prevState => ({
-      ...prevState,
-      [id]: value
-    }));
-  };
 
   const inputs = props.inputs?.map(input => {
     const inputItem = (
       <Input
         {...input}
         key={input.id}
-        value={
-          input.state
-            ? input.state[input.id]
-            : props.state
-            ? props.state[input.id]
-            : state[input.id]
-        }
-        onChange={props.onChange ? props.onChange : handleChange}
+        value={input.state ? input.state[input.id] : props.state[input.id]}
+        onChange={props.onChange}
         className={input.className}
       />
     );

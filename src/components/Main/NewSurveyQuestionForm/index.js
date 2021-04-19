@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Button from '../Button/Button.component';
-import Input from '../Input/Input.component';
+import Button from '../Button';
+import Input from '../Input';
 import classNames from 'classnames';
 import ReactStars from 'react-rating-stars-component';
 

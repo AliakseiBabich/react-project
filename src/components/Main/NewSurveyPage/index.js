@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import Form from '../Form/Form.component';
-import Table from '../Table/Table.component';
-import NewSurveyQuestionForm from '../NewSurveyQuestionForm/NewSurveyQuestionForm.component';
+import Form from '../Form';
+import Table from '../Table';
+import NewSurveyQuestionForm from '../NewSurveyQuestionForm';
 import cloneDeep from 'lodash/cloneDeep';
-import Input from '../Input/Input.component';
-import Button from '../Button/Button.component';
-import { classNames } from 'classnames';
+import Input from '../Input';
+import Button from '../Button';
+import { nanoid } from 'nanoid';
+import { newSurveyQuestionTypes } from '~/constants/constants';
+import { store as notificationsStore } from 'react-notifications-component';
 
 const NewSurveyPage = props => {
   const formState = {
@@ -15,6 +17,18 @@ const NewSurveyPage = props => {
     random: false,
     obligatory: false,
     indicator: false
+  };
+
+  const notificationConfig = {
+    message: '',
+    type: 'warning',
+    insert: 'bottom',
+    container: 'bottom-left',
+    animationIn: ['animate__animated', 'animate__fadeIn'],
+    animationOut: ['animate__animated', 'animate__fadeOut'],
+    dismiss: {
+      duration: 3500
+    }
   };
 
   const initSurveyState = {
@@ -30,11 +44,9 @@ const NewSurveyPage = props => {
   const handleQuestionTypeClick = e => {
     e.preventDefault();
     let question = cloneDeep(questionState);
-    cloneDeep(props.surveyQuestionTypes).map(q => {
-      if (q.name === e.target.innerText) {
-        question = q;
-      }
-    });
+    question = newSurveyQuestionTypes.find(
+      ({ name }) => name === e.target.innerText
+    );
     updateQuestionState(question);
   };
 
@@ -70,15 +82,15 @@ const NewSurveyPage = props => {
     const questions = surveyState.questions;
     const value = e.target.innerText;
     if (questions.length === 0) {
-      alert('Добавьте и сохраните хотя бы один вопрос');
+      notificationConfig.message = 'Добваьте и сохраните хотя бы один вопрос';
+      notificationsStore.addNotification(notificationConfig);
     } else {
       const survey = cloneDeep(surveyState);
-      survey.id = survey.name.split(' ').join('_');
+      survey.id = nanoid();
       const date = new Date();
       survey.saveDate = `${date.getDate()}.${
         date.getMonth() + 1
       }.${date.getFullYear()}`;
-      console.log(survey.saveDate);
       if (value === 'Сохранить') {
         localStorage.setItem(`survey: ${survey.id}`, JSON.stringify(survey));
       } else {
@@ -94,16 +106,18 @@ const NewSurveyPage = props => {
     e.preventDefault();
     const { type, questionName, answers } = questionState;
     if (!questionName) {
-      alert('Введите вопрос и нажмите Enter');
+      notificationConfig.message = 'Введите вопрос и нажмите Enter';
+      notificationsStore.addNotification(notificationConfig);
     } else if (
       (type === 'radio' || type === 'checkbox') &&
       answers.length < 2
     ) {
-      alert('Добавьте ещё один вариант ответа');
+      notificationConfig.message = 'Добавьте ещё один вариант ответа';
+      notificationsStore.addNotification(notificationConfig);
     } else {
       let question = cloneDeep(questionState);
       const survey = cloneDeep(surveyState);
-      question.id = `q-${survey.questions.length + 1}`;
+      question.id = `q-${nanoid()}`;
       survey.questions.push(question);
       updateSurveyState(survey);
       question = {};
@@ -236,7 +250,7 @@ const NewSurveyPage = props => {
         <Table
           className="newSurveyPage-surveyParams-questions"
           headerData={{ name: 'Тип вопроса' }}
-          contentData={props.surveyQuestionTypes}
+          contentData={newSurveyQuestionTypes}
           onClick={handleQuestionTypeClick}
         />
         <Table

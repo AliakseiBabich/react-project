@@ -4,7 +4,6 @@ import './App.sass';
 import Header from './Header/Header';
 import Main from './Main/Main';
 import Footer from './Footer/Footer';
-import { cloneDeep } from 'lodash/cloneDeep';
 
 const App = props => {
   const initAuthState = { isAuthenticated: false };

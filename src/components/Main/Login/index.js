@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import Form from '../Form/Form.component';
-import { cloneDeep } from 'lodash/cloneDeep';
+import Form from '../Form';
 
 const Login = props => {
   const initLoginstate = {
