@@ -3,8 +3,9 @@ import Form from '../Form';
 import { REGISTER_INPUTS as registerInputs } from '~/constants/constants';
 import { store as notificationsStore } from 'react-notifications-component';
 import { NOTIFICATION_CONFIG as notificationConfig } from '~/constants/constants';
+import cloneDeep from 'lodash/cloneDeep';
 
-const RegisterForm = props => {
+const RegisterForm = () => {
   const initRegisterState = {
     firstname: '',
     lastname: '',
@@ -43,9 +44,19 @@ const RegisterForm = props => {
           'Введенные пароли не совпадают, пожалуйста, попробуйте ещё раз';
         notificationsStore.addNotification(notificationConfig);
       } else {
-        localStorage.setItem(email, JSON.stringify(registerState));
+        const user = cloneDeep(registerState);
+        user.role = 'user';
+        const date = new Date();
+        user.registerDate = `${date.getDate()}.${
+          date.getMonth() + 1
+        }.${date.getFullYear()}`;
+        const usersList = localStorage.getItem('users')
+          ? JSON.parse(localStorage.getItem('users'))
+          : [];
+        usersList.push(user);
+        localStorage.setItem('users', JSON.stringify(usersList));
         notificationConfig.type = 'success';
-        notificationConfig.message = 'пользователь успешно зарегистрирован';
+        notificationConfig.message = `пользователь ${registerState.email} успешно зарегистрирован`;
         notificationsStore.addNotification(notificationConfig);
       }
     }

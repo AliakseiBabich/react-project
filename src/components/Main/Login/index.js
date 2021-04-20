@@ -29,25 +29,32 @@ const Login = props => {
       notificationConfig.message = 'Пожалуйста, заполните все поля в форме';
       notificationsStore.addNotification(notificationConfig);
     } else {
-      const user = localStorage.getItem(email);
-      if (user) {
-        if (JSON.parse(user).password === password) {
-          const auth = { isAuthenticated: true };
-          props.handleAuth(auth);
-          localStorage.setItem('auth', JSON.stringify(auth));
-          notificationConfig.type = 'success';
-          notificationConfig.message = 'Вы успешно вошли в систему';
-          notificationsStore.addNotification(notificationConfig);
-        } else {
-          notificationConfig.message =
-            'Введен неправильный пароль, пожалуйста, попробуйте снова';
-          notificationsStore.addNotification(notificationConfig);
-        }
-      } else {
+      const users = JSON.parse(localStorage.getItem('users'));
+      if (!users) {
         notificationConfig.message =
           'Пользователя с таким email не существует, пожалуйста зарегистрируйтесь';
         notificationsStore.addNotification(notificationConfig);
       }
+      users?.map(user => {
+        if (user.email === email) {
+          if (user.password === password) {
+            const auth = { isAuthenticated: true };
+            props.handleAuth(auth);
+            localStorage.setItem('auth', JSON.stringify(auth));
+            notificationConfig.type = 'success';
+            notificationConfig.message = 'Вы успешно вошли в систему';
+            notificationsStore.addNotification(notificationConfig);
+          } else {
+            notificationConfig.message =
+              'Введен неправильный пароль, пожалуйста, попробуйте снова';
+            notificationsStore.addNotification(notificationConfig);
+          }
+        } else {
+          notificationConfig.message =
+            'Пользователя с таким email не существует, пожалуйста зарегистрируйтесь';
+          notificationsStore.addNotification(notificationConfig);
+        }
+      });
     }
   };
 

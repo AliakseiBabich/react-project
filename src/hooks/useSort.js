@@ -9,8 +9,6 @@ export const useSort = (
   const sortedItems = useMemo(() => {
     let sortableItems = [...items];
     sortableItems.sort((a, b) => {
-      console.log(a[sortConfig.key]);
-      console.log(b[sortConfig.key]);
       if (a[sortConfig.key] && b[sortConfig.key]) {
         if (a[sortConfig.key].toLowerCase() < b[sortConfig.key].toLowerCase()) {
           return sortConfig.direction === 'ascending' ? -1 : 1;
