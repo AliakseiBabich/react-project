@@ -8,6 +8,7 @@ import Button from '../Button';
 import { nanoid } from 'nanoid';
 import { newSurveyQuestionTypes } from '~/constants/constants';
 import { store as notificationsStore } from 'react-notifications-component';
+import { notificationConfig } from '~/constants/constants';
 
 const NewSurveyPage = props => {
   const formState = {
@@ -17,18 +18,6 @@ const NewSurveyPage = props => {
     random: false,
     obligatory: false,
     indicator: false
-  };
-
-  const notificationConfig = {
-    message: '',
-    type: 'warning',
-    insert: 'bottom',
-    container: 'bottom-left',
-    animationIn: ['animate__animated', 'animate__fadeIn'],
-    animationOut: ['animate__animated', 'animate__fadeOut'],
-    dismiss: {
-      duration: 3500
-    }
   };
 
   const initSurveyState = {
@@ -82,7 +71,7 @@ const NewSurveyPage = props => {
     const questions = surveyState.questions;
     const value = e.target.innerText;
     if (questions.length === 0) {
-      notificationConfig.message = 'Добваьте и сохраните хотя бы один вопрос';
+      notificationConfig.message = 'Добавьте и сохраните хотя бы один вопрос';
       notificationsStore.addNotification(notificationConfig);
     } else {
       const survey = cloneDeep(surveyState);
@@ -99,6 +88,9 @@ const NewSurveyPage = props => {
           JSON.stringify(survey)
         );
       }
+      notificationConfig.type = 'success';
+      notificationConfig.message = 'Ваш опрос сохранен';
+      notificationsStore.addNotification(notificationConfig);
     }
   };
 

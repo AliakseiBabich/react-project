@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import Form from '../Form';
+import { store as notificationsStore } from 'react-notifications-component';
+import { notificationConfig } from '~/constants/constants';
 
 const Login = props => {
   const initLoginstate = {
@@ -21,23 +23,29 @@ const Login = props => {
   const handleLogin = e => {
     e.preventDefault();
     const { email, password } = loginState;
+    notificationConfig.type = 'warning';
     if (!email || !password) {
-      alert('Пожалуйста, заполните все поля в форме');
+      notificationConfig.message = 'Пожалуйста, заполните все поля в форме';
+      notificationsStore.addNotification(notificationConfig);
     } else {
       const user = localStorage.getItem(email);
       if (user) {
         if (JSON.parse(user).password === password) {
-          console.log();
           const auth = { isAuthenticated: true };
           props.handleAuth(auth);
           localStorage.setItem('auth', JSON.stringify(auth));
+          notificationConfig.type = 'success';
+          notificationConfig.message = 'Вы успешно вошли в систему';
+          notificationsStore.addNotification(notificationConfig);
         } else {
-          alert('Введен неправильный пароль, пожалуйста, попробуйте снова');
+          notificationConfig.message =
+            'Введен неправильный пароль, пожалуйста, попробуйте снова';
+          notificationsStore.addNotification(notificationConfig);
         }
       } else {
-        alert(
-          'Пользователя с таким email не существует, пожалуйста зарегистрируйтесь'
-        );
+        notificationConfig.message =
+          'Пользователя с таким email не существует, пожалуйста зарегистрируйтесь';
+        notificationsStore.addNotification(notificationConfig);
       }
     }
   };

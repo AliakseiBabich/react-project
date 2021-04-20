@@ -3,6 +3,8 @@ import React from 'react';
 import { useSort } from '../../../hooks/useSort';
 
 const Table = props => {
+  const tableClass = classNames(`table`, props.className);
+
   // sorting for the content
   const { items, requestSort, sortConfig } = useSort(props.contentData);
 
@@ -52,6 +54,7 @@ const Table = props => {
                     </td>
                   );
                   break;
+                case 'role':
                 case 'saveDate':
                   cells.push(<td key={item[0]}>{item[1]}</td>);
                   break;
@@ -62,7 +65,9 @@ const Table = props => {
               <tr
                 key={i}
                 className={
-                  props.headerData.indexOf('Тип вопроса') != -1 ? 'navlink' : ''
+                  props.headerData.indexOf('Тип вопроса') === -1
+                    ? 'navlink'
+                    : ''
                 }
               >
                 <td onClick={props.onClick}>{c}</td>
@@ -83,8 +88,6 @@ const Table = props => {
         );
       })
     : null;
-
-  const tableClass = classNames(`table`, props.className);
 
   return (
     <table className={tableClass}>

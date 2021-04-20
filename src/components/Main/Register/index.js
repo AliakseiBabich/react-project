@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import Form from '../Form';
+import { store as notificationsStore } from 'react-notifications-component';
+import { notificationConfig } from '~/constants/constants';
 
 const RegisterForm = props => {
   const initRegisterState = {
@@ -29,13 +31,21 @@ const RegisterForm = props => {
       password,
       confirmPassword
     } = registerState;
+    notificationConfig.type = 'warning';
     if (!firstname || !lastname || !email || !password || !confirmPassword) {
-      alert('Пожалуйста, заполните все поля в форме регистрации');
+      notificationConfig.message =
+        'Пожалуйста, заполните все поля в форме регистрации';
+      notificationsStore.addNotification(notificationConfig);
     } else {
       if (password !== confirmPassword) {
-        alert('Введенные пароли не совпадают, пожалуйста, попробуйте ещё раз');
+        notificationConfig.message =
+          'Введенные пароли не совпадают, пожалуйста, попробуйте ещё раз';
+        notificationsStore.addNotification(notificationConfig);
       } else {
         localStorage.setItem(email, JSON.stringify(registerState));
+        notificationConfig.type = 'success';
+        notificationConfig.message = 'пользователь успешно зарегистрирован';
+        notificationsStore.addNotification(notificationConfig);
       }
     }
   };
