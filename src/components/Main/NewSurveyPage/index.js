@@ -8,7 +8,7 @@ import Button from '../Button';
 import { nanoid } from 'nanoid';
 import { newSurveyQuestionTypes } from '~/constants/constants';
 import { store as notificationsStore } from 'react-notifications-component';
-import { notificationConfig } from '~/constants/constants';
+import { NOTIFICATION_CONFIG as notificationConfig } from '~/constants/constants';
 
 const NewSurveyPage = props => {
   const formState = {

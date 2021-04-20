@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Form from '../Form';
+import { REGISTER_INPUTS as registerInputs } from '~/constants/constants';
 import { store as notificationsStore } from 'react-notifications-component';
-import { notificationConfig } from '~/constants/constants';
+import { NOTIFICATION_CONFIG as notificationConfig } from '~/constants/constants';
 
 const RegisterForm = props => {
   const initRegisterState = {
@@ -62,7 +63,7 @@ const RegisterForm = props => {
   return (
     <Form
       header="Регистрация"
-      inputs={props.registerInputs}
+      inputs={registerInputs}
       className="register-form"
       state={registerState}
       buttons={registerBtn}

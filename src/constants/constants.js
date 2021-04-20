@@ -1,50 +1,4 @@
 export const INPUTS = {
-  register: [
-    {
-      type: 'text',
-      id: 'firstname',
-      name: 'user_firstname',
-      placeholder: 'Имя'
-    },
-    {
-      type: 'text',
-      id: 'lastname',
-      name: 'user_lastname',
-      placeholder: 'Фамилия'
-    },
-    {
-      type: 'email',
-      id: 'email',
-      name: 'user_email',
-      placeholder: 'Логин (email)'
-    },
-    {
-      type: 'password',
-      id: 'password',
-      name: 'user_password',
-      placeholder: 'Пароль'
-    },
-    {
-      type: 'password',
-      id: 'confirmPassword',
-      name: 'user_confirmPassword',
-      placeholder: 'Повторите пароль'
-    }
-  ],
-  login: [
-    {
-      type: 'email',
-      id: 'email',
-      name: 'user_email',
-      placeholder: 'Логин (email)'
-    },
-    {
-      type: 'password',
-      id: 'password',
-      name: 'user_password',
-      placeholder: '********'
-    }
-  ],
   newSurveyParamTypes: [
     {
       type: 'checkbox',
@@ -84,6 +38,54 @@ export const INPUTS = {
     }
   ]
 };
+
+export const LOGIN_INPUTS = [
+  {
+    type: 'email',
+    id: 'email',
+    name: 'user_email',
+    placeholder: 'Логин (email)'
+  },
+  {
+    type: 'password',
+    id: 'password',
+    name: 'user_password',
+    placeholder: '********'
+  }
+];
+
+export const REGISTER_INPUTS = [
+  {
+    type: 'text',
+    id: 'firstname',
+    name: 'user_firstname',
+    placeholder: 'Имя'
+  },
+  {
+    type: 'text',
+    id: 'lastname',
+    name: 'user_lastname',
+    placeholder: 'Фамилия'
+  },
+  {
+    type: 'email',
+    id: 'email',
+    name: 'user_email',
+    placeholder: 'Логин (email)'
+  },
+  {
+    type: 'password',
+    id: 'password',
+    name: 'user_password',
+    placeholder: 'Пароль'
+  },
+  {
+    type: 'password',
+    id: 'confirmPassword',
+    name: 'user_confirmPassword',
+    placeholder: 'Повторите пароль'
+  }
+];
 
 export const newSurveyQuestionTypes = [
   {
@@ -132,7 +134,7 @@ export const TABLE_HEADERS = {
   }
 };
 
-export const notificationConfig = {
+export const NOTIFICATION_CONFIG = {
   message: '',
   type: 'warning',
   insert: 'bottom',

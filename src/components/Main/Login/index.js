@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import Form from '../Form';
+import { LOGIN_INPUTS as loginInputs } from '~/constants/constants';
 import { store as notificationsStore } from 'react-notifications-component';
-import { notificationConfig } from '~/constants/constants';
+import { NOTIFICATION_CONFIG as notificationConfig } from '~/constants/constants';
 
 const Login = props => {
   const initLoginstate = {
@@ -62,7 +63,7 @@ const Login = props => {
   return (
     <Form
       header="Вход"
-      inputs={props.loginInputs}
+      inputs={loginInputs}
       className="login-form"
       state={loginState}
       buttons={loginBtn}
