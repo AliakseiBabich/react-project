@@ -3,6 +3,7 @@ import classNames from 'classnames';
 
 const Button = props => {
   const btnClass = classNames(`button`, props.className);
+  console.log(props);
   return (
     <button onClick={props.onClick} type={props.type} className={btnClass}>
       {props.value}

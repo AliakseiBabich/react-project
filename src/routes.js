@@ -8,6 +8,7 @@ import Panel from './components/Main/Panel';
 import UsersPage from './components/Main/UsersPage';
 import MySurveysPage from './components/Main/MySurveysPage';
 import NewSurveyPage from './components/Main/NewSurveyPage';
+import DraftsPage from './components/Main/DraftsPage';
 
 const useRoutes = props => {
   const mainText = () => {
@@ -30,7 +31,7 @@ const useRoutes = props => {
     );
   };
 
-  if (props.authState.isAuthenticated || localStorage.getItem('auth')) {
+  if (localStorage.getItem('auth')) {
     return (
       <Switch>
         {mainText()}
@@ -53,17 +54,15 @@ const useRoutes = props => {
         ></Route>
         <Route path="/home/my_surveys">
           <Navigation />
-          <MySurveysPage
-            tableHeaders={props.tableHeaders.mySurveysTable}
-            mockupData={props.mockups.mySurveysTableContentMockup}
-          />
+          <MySurveysPage />
+        </Route>
+        <Route path="/home/drafts">
+          <Navigation />
+          <DraftsPage />
         </Route>
         <Route path="/home/users">
           <Navigation />
-          <UsersPage
-            tableHeaders={props.tableHeaders.usersTable}
-            mockupData={props.mockups.usersTableContentData}
-          />
+          <UsersPage mockupData={props.mockups.usersTableContentData} />
         </Route>
         <Redirect from="/login" to="/home" />
       </Switch>

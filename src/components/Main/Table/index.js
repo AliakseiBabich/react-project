@@ -18,10 +18,10 @@ const Table = props => {
   // adding data to table header
 
   const header = props.headerData
-    ? Object.entries(props.headerData).map(item => {
+    ? Object.entries(props.headerData).map((item, i) => {
         return (
           <th
-            key={item[0]}
+            key={i}
             onClick={() => requestSort(item[0])}
             className={getClassNamesFor(item[0])}
           >
@@ -37,7 +37,7 @@ const Table = props => {
       ? items.map((c, i) => {
           let cells = [];
           if (typeof c === 'object') {
-            Object.entries(c).map(item => {
+            Object.entries(c).map((item, i) => {
               switch (item[0]) {
                 case 'id':
                 case 'type':
@@ -46,17 +46,15 @@ const Table = props => {
                   break;
                 case 'name':
                   cells.push(
-                    <td
-                      key={item[0]}
-                      onClick={props.onClick ? props.onClick : null}
-                    >
+                    <td key={i} onClick={props.onClick ? props.onClick : null}>
                       {item[1]}
                     </td>
                   );
                   break;
                 case 'role':
+                case 'registerDate':
                 case 'saveDate':
-                  cells.push(<td key={item[0]}>{item[1]}</td>);
+                  cells.push(<td key={i}>{item[1]}</td>);
                   break;
               }
             });
@@ -74,7 +72,7 @@ const Table = props => {
               </tr>
             );
           }
-          return <tr key={c.id}>{cells}</tr>;
+          return <tr key={i}>{cells}</tr>;
         })
       : null;
 

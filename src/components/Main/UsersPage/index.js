@@ -1,16 +1,18 @@
 import React from 'react';
 import Table from '../Table';
+import { TABLE_HEADERS } from '../../../constants/constants';
 
 const UsersPage = props => {
-  const tableFooterData = [
-    { ['Всего пользователей']: props.mockupData.length }
-  ];
+  const users = localStorage.getItem('users')
+    ? JSON.parse(localStorage.getItem('users'))
+    : null;
+  const tableFooterData = [{ ['Всего пользователей']: users.length }];
   return (
     <div className="users-page">
       <h3>Пользователи</h3>
       <Table
-        headerData={props.tableHeaders}
-        contentData={props.mockupData}
+        headerData={TABLE_HEADERS.usersTable}
+        contentData={users}
         footerData={tableFooterData}
       />
     </div>

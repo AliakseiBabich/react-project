@@ -45,7 +45,8 @@ const RegisterForm = () => {
         notificationsStore.addNotification(notificationConfig);
       } else {
         const user = cloneDeep(registerState);
-        user.role = 'user';
+        user.name = `${user.firstname} ${user.lastname}`;
+        user.role = 'admin';
         const date = new Date();
         user.registerDate = `${date.getDate()}.${
           date.getMonth() + 1

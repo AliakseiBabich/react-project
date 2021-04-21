@@ -1,7 +1,8 @@
 import React from 'react';
 import Table from '../Table';
+import { TABLE_HEADERS } from '../../../constants/constants';
 
-const MySurveysPage = props => {
+const MySurveysPage = () => {
   const surveys = Object.entries(localStorage)?.reduce((acc, entry) => {
     if (entry[0].includes('survey:')) {
       acc.push(JSON.parse(entry[1]));
@@ -13,7 +14,7 @@ const MySurveysPage = props => {
     <div className="my-surveys-page">
       <h3>Мои опросы</h3>
       <Table
-        headerData={props.tableHeaders}
+        headerData={TABLE_HEADERS.mySurveysTable}
         contentData={surveys}
         footerData={tableFooterData}
       />
