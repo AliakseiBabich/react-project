@@ -5,7 +5,7 @@ import { TABLE_HEADERS } from '../../../constants/constants';
 const UsersPage = props => {
   const users = localStorage.getItem('users')
     ? JSON.parse(localStorage.getItem('users'))
-    : null;
+    : [];
   const tableFooterData = [{ ['Всего пользователей']: users.length }];
   return (
     <div className="users-page">

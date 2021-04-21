@@ -3,12 +3,9 @@ import Table from '../Table';
 import { TABLE_HEADERS } from '../../../constants/constants';
 
 const MySurveysPage = () => {
-  const surveys = Object.entries(localStorage)?.reduce((acc, entry) => {
-    if (entry[0].includes('survey:')) {
-      acc.push(JSON.parse(entry[1]));
-    }
-    return acc;
-  }, []);
+  const surveys = localStorage.getItem('surveys')
+    ? JSON.parse(localStorage.getItem('surveys'))
+    : [];
   const tableFooterData = [{ ['Всего опросов']: surveys.length }];
   return (
     <div className="my-surveys-page">

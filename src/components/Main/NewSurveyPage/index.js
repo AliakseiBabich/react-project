@@ -81,16 +81,22 @@ const NewSurveyPage = props => {
         date.getMonth() + 1
       }.${date.getFullYear()}`;
       if (value === 'Сохранить') {
-        localStorage.setItem(`survey: ${survey.id}`, JSON.stringify(survey));
+        const surveysList = localStorage.getItem('surveys')
+          ? JSON.parse(localStorage.getItem('surveys'))
+          : [];
+        surveysList.push(survey);
+        localStorage.setItem(`surveys`, JSON.stringify(surveysList));
       } else {
-        localStorage.setItem(
-          `survey_draft: ${survey.id}`,
-          JSON.stringify(survey)
-        );
+        const draftsList = localStorage.getItem('drafts')
+          ? JSON.parse(localStorage.getItem('drafts'))
+          : [];
+        draftsList.push(survey);
+        localStorage.setItem(`drafts`, JSON.stringify(draftsList));
       }
       notificationConfig.type = 'success';
       notificationConfig.message = 'Ваш опрос сохранен';
       notificationsStore.addNotification(notificationConfig);
+      updateSurveyState(initSurveyState);
     }
   };
 
