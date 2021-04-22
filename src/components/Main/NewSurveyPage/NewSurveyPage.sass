@@ -6,9 +6,29 @@
 
   &-newsurvey
     width: 70%
-    h3
-      margin-bottom: 20px
-    &-container
+    &-header-container
+      margin-bottom: 3rem
+      .header-wrapper
+        margin-bottom: 15px
+        display: flex
+        align-items: center
+        h3
+          margin-right: 10px
+        .survey-name-input
+          width: 50%
+        &-btns
+          display: flex
+          justify-content: start
+          align-items: center
+          .header-button
+            margin-left: 5px
+            padding: 3px 5px
+            font-size: 0.9rem
+            &:first-child
+              margin: 0
+            &:last-child
+              margin-left: auto
+    &-survey-container
       border: 1px solid black
 
   &-surveyParams

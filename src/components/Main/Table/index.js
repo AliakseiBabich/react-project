@@ -3,6 +3,8 @@ import React from 'react';
 import { useSort } from '../../../hooks/useSort';
 
 const Table = props => {
+  const tableClass = classNames(`table`, props.className);
+
   // sorting for the content
   const { items, requestSort, sortConfig } = useSort(props.contentData);
 
@@ -16,10 +18,10 @@ const Table = props => {
   // adding data to table header
 
   const header = props.headerData
-    ? Object.entries(props.headerData).map(item => {
+    ? Object.entries(props.headerData).map((item, i) => {
         return (
           <th
-            key={item[0]}
+            key={i}
             onClick={() => requestSort(item[0])}
             className={getClassNamesFor(item[0])}
           >
@@ -35,20 +37,25 @@ const Table = props => {
       ? items.map((c, i) => {
           let cells = [];
           if (typeof c === 'object') {
-            Object.entries(c).map(item => {
-              if (
-                item[0] !== 'id' &&
-                item[0] !== 'type' &&
-                item[0] !== 'className'
-              ) {
-                cells.push(
-                  <td
-                    key={item[0]}
-                    onClick={props.onClick ? props.onClick : null}
-                  >
-                    {item[1]}
-                  </td>
-                );
+            Object.entries(c).map((item, i) => {
+              switch (item[0]) {
+                case 'id':
+                case 'type':
+                case 'className':
+                case 'question':
+                  break;
+                case 'name':
+                  cells.push(
+                    <td key={i} onClick={props.onClick ? props.onClick : null}>
+                      {item[1]}
+                    </td>
+                  );
+                  break;
+                case 'role':
+                case 'registerDate':
+                case 'saveDate':
+                  cells.push(<td key={i}>{item[1]}</td>);
+                  break;
               }
             });
           } else {
@@ -56,14 +63,16 @@ const Table = props => {
               <tr
                 key={i}
                 className={
-                  props.headerData.indexOf('Тип вопроса') != -1 ? 'navlink' : ''
+                  props.headerData.indexOf('Тип вопроса') === -1
+                    ? 'navlink'
+                    : ''
                 }
               >
                 <td onClick={props.onClick}>{c}</td>
               </tr>
             );
           }
-          return <tr key={c.id}>{cells}</tr>;
+          return <tr key={i}>{cells}</tr>;
         })
       : null;
 
@@ -77,8 +86,6 @@ const Table = props => {
         );
       })
     : null;
-
-  const tableClass = classNames(`table`, props.className);
 
   return (
     <table className={tableClass}>

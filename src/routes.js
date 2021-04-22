@@ -1,13 +1,14 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import About from './components/Main/About/About';
-import Login from './components/Main/Login/Login.component';
-import RegisterForm from './components/Main/Register/Register.component';
-import Navigation from './components/Main/Navigation/Navigation.component';
-import Panel from './components/Main/Panel/Panel.component';
-import UsersPage from './components/Main/UsersPage/UsersPage.component';
-import MySurveysPage from './components/Main/MySurveysPage/MySurveysPage.component';
-import NewSurveyPage from './components/Main/NewSurveyPage/NewSurveyPage.component';
+import About from './components/Main/About';
+import Login from './components/Main/Login';
+import RegisterForm from './components/Main/Register';
+import Navigation from './components/Main/Navigation';
+import Panel from './components/Main/Panel';
+import UsersPage from './components/Main/UsersPage';
+import MySurveysPage from './components/Main/MySurveysPage';
+import NewSurveyPage from './components/Main/NewSurveyPage';
+import DraftsPage from './components/Main/DraftsPage';
 
 const useRoutes = props => {
   const mainText = () => {
@@ -30,7 +31,7 @@ const useRoutes = props => {
     );
   };
 
-  if (props.isAuthenticated) {
+  if (localStorage.getItem('auth')) {
     return (
       <Switch>
         {mainText()}
@@ -45,24 +46,23 @@ const useRoutes = props => {
             <>
               <Navigation />
               <NewSurveyPage
-                surveyParameters={props.inputs.newSurveyParamTypes} surveyQuestionTypes={props.inputs.newSurveyQuestionTypes}
+                surveyParameters={props.inputs.newSurveyParamTypes}
+                surveyQuestionTypes={props.inputs.newSurveyQuestionTypes}
               />
             </>
           )}
         ></Route>
         <Route path="/home/my_surveys">
           <Navigation />
-          <MySurveysPage
-            tableHeaders={props.tableHeaders.mySurveysTable}
-            mockupData={props.mockups.mySurveysTableContentMockup}
-          />
+          <MySurveysPage />
+        </Route>
+        <Route path="/home/drafts">
+          <Navigation />
+          <DraftsPage />
         </Route>
         <Route path="/home/users">
           <Navigation />
-          <UsersPage
-            tableHeaders={props.tableHeaders.usersTable}
-            mockupData={props.mockups.usersTableContentData}
-          />
+          <UsersPage mockupData={props.mockups.usersTableContentData} />
         </Route>
         <Redirect from="/login" to="/home" />
       </Switch>
@@ -74,7 +74,13 @@ const useRoutes = props => {
       <Route exact path="/about" render={() => <About />} />
       <Route
         path="/login"
-        render={() => <Login loginInputs={props.inputs.login} />}
+        render={() => (
+          <Login
+            loginInputs={props.inputs.login}
+            authState={props.authState}
+            handleAuth={props.handleAuth}
+          />
+        )}
       />
       <Route
         path="/register"
