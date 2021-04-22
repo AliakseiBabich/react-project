@@ -23,7 +23,7 @@ const NewSurveyPage = props => {
   const initSurveyState = {
     name: '',
     id: 'survey-name',
-    questions: []
+    pages: [[]]
   };
 
   const [surveyState, updateSurveyState] = useState(initSurveyState);
@@ -33,9 +33,10 @@ const NewSurveyPage = props => {
   const handleQuestionTypeClick = e => {
     e.preventDefault();
     let question = cloneDeep(questionState);
-    question = newSurveyQuestionTypes.find(
+    question = cloneDeep(newSurveyQuestionTypes).find(
       ({ name }) => name === e.target.innerText
     );
+    question.name = '';
     updateQuestionState(question);
   };
 
@@ -53,8 +54,9 @@ const NewSurveyPage = props => {
       const question = cloneDeep(questionState);
       const survey = cloneDeep(surveyState);
       if (e.target.id === question.id) {
-        question.questionName = inputText[question.id];
+        question.name = inputText[question.id];
         question.answers = [];
+        console.log(question);
       } else if (e.target.id === survey.id) {
         survey.name = inputText[survey.id];
         updateSurveyState(survey);
@@ -68,9 +70,9 @@ const NewSurveyPage = props => {
 
   const handleSurveySave = e => {
     e.preventDefault();
-    const questions = surveyState.questions;
+    const pages = surveyState.pages;
     const value = e.target.innerText;
-    if (questions.length === 0) {
+    if (pages[0].length === 0) {
       notificationConfig.message = 'Добавьте и сохраните хотя бы один вопрос';
       notificationsStore.addNotification(notificationConfig);
     } else {
@@ -102,8 +104,8 @@ const NewSurveyPage = props => {
 
   const handleQuestionSave = e => {
     e.preventDefault();
-    const { type, questionName, answers } = questionState;
-    if (!questionName) {
+    const { type, name, answers } = questionState;
+    if (!name) {
       notificationConfig.message = 'Введите вопрос и нажмите Enter';
       notificationsStore.addNotification(notificationConfig);
     } else if (
@@ -116,7 +118,7 @@ const NewSurveyPage = props => {
       let question = cloneDeep(questionState);
       const survey = cloneDeep(surveyState);
       question.id = `q-${nanoid()}`;
-      survey.questions.push(question);
+      survey.pages[survey.pages.length - 1].push(question);
       updateSurveyState(survey);
       question = {};
       updateQuestionState(question);
@@ -133,6 +135,13 @@ const NewSurveyPage = props => {
     let question = cloneDeep(questionState);
     question = {};
     updateQuestionState(question);
+  };
+
+  const handleAddPage = e => {
+    e.preventDefault();
+    const survey = cloneDeep(surveyState);
+    survey.pages.push([]);
+    updateSurveyState(survey);
   };
 
   const buttonsData = {
@@ -154,6 +163,12 @@ const NewSurveyPage = props => {
         type: 'submit',
         className: 'header-button',
         onClick: handleCancel
+      },
+      {
+        value: 'Новая страница',
+        type: 'submit',
+        className: 'header-button',
+        onClick: handleAddPage
       }
     ],
     questionFormBtns: [
@@ -212,7 +227,7 @@ const NewSurveyPage = props => {
     }
   };
 
-  const survey = surveyState.questions.map((q, i) => {
+  const survey = surveyState.pages[0].map((q, i) => {
     return (
       <NewSurveyQuestionForm
         newQuestionInfo={q}

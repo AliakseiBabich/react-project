@@ -24,13 +24,13 @@ const DraftsPage = () => {
     );
   });
 
-  console.log(drafts);
-  const footerData = [{ ['Всего шаблонов']: 10 }];
+  const footerData = <div>{`Всего шаблонов: ${drafts.length}`}</div>;
 
   return (
     <div className={draftsPageClass}>
       <h3>Шаблоны</h3>
       <div className={`${draftsPageClass}-container`}>{drafts}</div>
+      {footerData}
     </div>
   );
 };

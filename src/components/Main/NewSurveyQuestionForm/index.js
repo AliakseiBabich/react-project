@@ -71,10 +71,10 @@ const NewSurveyQuestionForm = props => {
   });
 
   const qHead = () => {
-    if (props.newQuestionInfo.questionName) {
+    if (props.newQuestionInfo.name) {
       return (
         <h2 className="form-container-header">
-          {props.newQuestionInfo.questionName}
+          {props.newQuestionInfo.name}
         </h2>
       );
     } else {
