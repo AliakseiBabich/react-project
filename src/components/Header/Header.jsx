@@ -3,8 +3,14 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 const Header = props => {
-  const linkTo = props.isAuthenticated ? '/home' : '/login';
-  const linkText = props.isAuthenticated ? 'Привет, admin' : 'Вход';
+  const linkTo =
+    props.authState.isAuthenticated || localStorage.getItem('auth')
+      ? '/home'
+      : '/login';
+  const linkText =
+    props.authState.isAuthenticated || localStorage.getItem('auth')
+      ? 'Привет, admin'
+      : 'Вход';
   return (
     <header className="header">
       <NavLink exact={true} to="/" className="header-logo">

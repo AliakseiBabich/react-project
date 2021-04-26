@@ -1,21 +1,24 @@
 import React, { useMemo, useState } from 'react';
 
-export const useSort = (items = [], config = null) => {
+export const useSort = (
+  items = [],
+  config = { key: 'name', direction: 'ascending' }
+) => {
   const [sortConfig, setSortConfig] = useState(config);
 
   const sortedItems = useMemo(() => {
     let sortableItems = [...items];
-    if (sortConfig !== null) {
-      sortableItems.sort((a, b) => {
-        if (a < b || a[sortConfig.key] < b[sortConfig.key]) {
+    sortableItems.sort((a, b) => {
+      if (a[sortConfig.key] && b[sortConfig.key]) {
+        if (a[sortConfig.key].toLowerCase() < b[sortConfig.key].toLowerCase()) {
           return sortConfig.direction === 'ascending' ? -1 : 1;
         }
-        if (a > b || a[sortConfig.key] > b[sortConfig.key]) {
+        if (a[sortConfig.key].toLowerCase() > b[sortConfig.key].toLowerCase()) {
           return sortConfig.direction === 'ascending' ? 1 : -1;
         }
-        return 0;
-      });
-    }
+      }
+      return 0;
+    });
     return sortableItems;
   }, [items, sortConfig]);
 
