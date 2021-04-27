@@ -7,8 +7,8 @@ import Input from '../Input';
 import Button from '../Button';
 import { nanoid } from 'nanoid';
 import { newSurveyQuestionTypes } from '~/constants/constants';
-import { store as notificationsStore } from 'react-notifications-component';
-import { NOTIFICATION_CONFIG as notificationConfig } from '~/constants/constants';
+import { showNotification } from '~/helpers';
+import { classNames } from 'classnames';
 
 const NewSurveyPage = props => {
   const formState = {
@@ -23,21 +23,31 @@ const NewSurveyPage = props => {
   const initSurveyState = {
     name: '',
     id: 'survey-name',
-    pages: [[]]
+    pages: []
   };
 
+  const initPageIndex = 0;
+
   const [surveyState, updateSurveyState] = useState(initSurveyState);
+  const [pageState, updatePageNum] = useState(initPageIndex);
   const [questionState, updateQuestionState] = useState({});
   const [inputText, updateInputText] = useState({});
 
   const handleQuestionTypeClick = e => {
     e.preventDefault();
     let question = cloneDeep(questionState);
+    const survey = cloneDeep(surveyState);
+    if (!survey.pages.length) {
+      const newPage = [];
+      survey.pages.push(newPage);
+      updateSurveyState(survey);
+    }
     question = cloneDeep(newSurveyQuestionTypes).find(
       ({ name }) => name === e.target.innerText
     );
     question.name = '';
     updateQuestionState(question);
+    console.log(surveyState);
   };
 
   const handleInput = e => {
@@ -49,16 +59,20 @@ const NewSurveyPage = props => {
   };
 
   const handleInputSubmit = e => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && e.target.value) {
+      console.log(e.target);
       e.preventDefault();
       const question = cloneDeep(questionState);
       const survey = cloneDeep(surveyState);
       if (e.target.id === question.id) {
         question.name = inputText[question.id];
         question.answers = [];
-        console.log(question);
       } else if (e.target.id === survey.id) {
         survey.name = inputText[survey.id];
+        if (!survey.pages.length) {
+          const newPage = [];
+          survey.pages.push(newPage);
+        }
         updateSurveyState(survey);
       } else {
         question.answers.push({ answer: e.target.value });
@@ -73,8 +87,10 @@ const NewSurveyPage = props => {
     const pages = surveyState.pages;
     const value = e.target.innerText;
     if (pages[0].length === 0) {
-      notificationConfig.message = 'Добавьте и сохраните хотя бы один вопрос';
-      notificationsStore.addNotification(notificationConfig);
+      showNotification({
+        type: 'warning',
+        message: 'Добавьте и сохраните хотя бы один вопрос'
+      });
     } else {
       const survey = cloneDeep(surveyState);
       survey.id = nanoid();
@@ -95,9 +111,10 @@ const NewSurveyPage = props => {
         draftsList.push(survey);
         localStorage.setItem(`drafts`, JSON.stringify(draftsList));
       }
-      notificationConfig.type = 'success';
-      notificationConfig.message = 'Ваш опрос сохранен';
-      notificationsStore.addNotification(notificationConfig);
+      showNotification({
+        type: 'success',
+        message: 'Ваш опрос сохранён'
+      });
       updateSurveyState(initSurveyState);
     }
   };
@@ -106,19 +123,23 @@ const NewSurveyPage = props => {
     e.preventDefault();
     const { type, name, answers } = questionState;
     if (!name) {
-      notificationConfig.message = 'Введите вопрос и нажмите Enter';
-      notificationsStore.addNotification(notificationConfig);
+      showNotification({
+        type: 'warning',
+        message: 'Введите вопрос и нажмите Enter'
+      });
     } else if (
       (type === 'radio' || type === 'checkbox') &&
       answers.length < 2
     ) {
-      notificationConfig.message = 'Добавьте ещё один вариант ответа';
-      notificationsStore.addNotification(notificationConfig);
+      showNotification({
+        type: 'warning',
+        message: 'Добавьте ещё один вариант ответа'
+      });
     } else {
       let question = cloneDeep(questionState);
       const survey = cloneDeep(surveyState);
       question.id = `q-${nanoid()}`;
-      survey.pages[survey.pages.length - 1].push(question);
+      survey.pages[pageState].push(question);
       updateSurveyState(survey);
       question = {};
       updateQuestionState(question);
@@ -140,8 +161,11 @@ const NewSurveyPage = props => {
   const handleAddPage = e => {
     e.preventDefault();
     const survey = cloneDeep(surveyState);
-    survey.pages.push([]);
+    const newPage = [];
+    survey.pages.push(newPage);
     updateSurveyState(survey);
+    const page = survey.pages.length - 1;
+    updatePageNum(page);
   };
 
   const buttonsData = {
@@ -227,7 +251,7 @@ const NewSurveyPage = props => {
     }
   };
 
-  const survey = surveyState.pages[0].map((q, i) => {
+  const addedQuestions = surveyState.pages[pageState]?.map((q, i) => {
     return (
       <NewSurveyQuestionForm
         newQuestionInfo={q}
@@ -248,16 +272,40 @@ const NewSurveyPage = props => {
     />
   );
 
+  const pageToShow = surveyState.pages.length ? (
+    <div className={`newSurveyPage-newsurvey__survey-page`}>
+      {addedQuestions}
+      {newQuestion}
+    </div>
+  ) : null;
+
+  const handlePageClick = e => {
+    e.preventDefault();
+    const pageIndex = +e.target.innerText.split(' ')[1] - 1;
+    updatePageNum(pageIndex);
+  };
+
+  const pageBtns = surveyState.pages?.map((p, i) => {
+    let pageBtnClass = 'newSurveyPage-newsurvey__pageBtn';
+    if (pageState === i) {
+      pageBtnClass = 'newSurveyPage-newsurvey__pageBtn pageBtn--active';
+    }
+    return (
+      <Button
+        className={pageBtnClass}
+        key={i}
+        value={`Cтраница ${i + 1}`}
+        onClick={handlePageClick}
+      />
+    );
+  });
+
   return (
     <div className="newSurveyPage">
       <div className="newSurveyPage-newsurvey">
-        <div className="newSurveyPage-newsurvey-header-container">
-          {sHead()}
-        </div>
-        <div className="newSurveyPage-newsurvey-survey-container">
-          {survey}
-          {newQuestion}
-        </div>
+        <div className="newSurveyPage-newsurvey__header">{sHead()}</div>
+        {pageBtns}
+        {pageToShow}
       </div>
       <div className="newSurveyPage-surveyParams">
         <Table
