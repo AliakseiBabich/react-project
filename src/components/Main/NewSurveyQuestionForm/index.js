@@ -59,11 +59,21 @@ const NewSurveyQuestionForm = props => {
     }
   }
 
-  const buttons = props.btns?.map(btn => {
+  const buttons = props.btns?.map((btn, i) => {
+    if (btn.className === 'addedQuestion-button') {
+      return (
+        <Button
+          {...btn}
+          key={i}
+          className={`${questionFormClass}-addedQuestion-button`}
+          onClick={btn.onClick}
+        />
+      );
+    }
     return (
       <Button
         {...btn}
-        key={btn.value ? btn.value : null}
+        key={i}
         className={`${questionFormClass}-question-btn`}
         onClick={btn.onClick}
       />
@@ -73,9 +83,7 @@ const NewSurveyQuestionForm = props => {
   const qHead = () => {
     if (props.newQuestionInfo.name) {
       return (
-        <h2 className="form-container-header">
-          {props.newQuestionInfo.name}
-        </h2>
+        <h2 className="form-container-header">{props.newQuestionInfo.name}</h2>
       );
     } else {
       return (

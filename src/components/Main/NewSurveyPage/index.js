@@ -8,9 +8,13 @@ import Button from '../Button';
 import { nanoid } from 'nanoid';
 import { newSurveyQuestionTypes } from '~/constants/constants';
 import { showNotification } from '~/helpers';
-import { classNames } from 'classnames';
+import correctLogoSrc from '~/assets/icons/correct.svg';
+import deleteLogoSrc from '~/assets/icons/delete.svg';
 
 const NewSurveyPage = props => {
+  const correctIcon = <img src={correctLogoSrc} alt="correct" />;
+  const deleteIcon = <img src={deleteLogoSrc} alt="delete" />;
+
   const formState = {
     anonimous: false,
     show_q_number: false,
@@ -47,7 +51,6 @@ const NewSurveyPage = props => {
     );
     question.name = '';
     updateQuestionState(question);
-    console.log(surveyState);
   };
 
   const handleInput = e => {
@@ -86,7 +89,7 @@ const NewSurveyPage = props => {
     e.preventDefault();
     const pages = surveyState.pages;
     const value = e.target.innerText;
-    if (pages[0].length === 0) {
+    if (!pages.length || !pages[0]?.length) {
       showNotification({
         type: 'warning',
         message: 'Добавьте и сохраните хотя бы один вопрос'
@@ -184,7 +187,7 @@ const NewSurveyPage = props => {
       },
       {
         value: 'Отмена',
-        type: 'submit',
+        type: 'reset',
         className: 'header-button',
         onClick: handleCancel
       },
@@ -204,8 +207,24 @@ const NewSurveyPage = props => {
       },
       {
         value: 'Отмена',
-        type: 'submit',
+        type: 'reset',
         className: 'question-button',
+        onClick: handleCancel
+      }
+    ],
+    correctIconBtn: [
+      {
+        value: correctIcon,
+        type: 'button',
+        className: 'addedQuestion-button',
+        onClick: handleCancel
+      }
+    ],
+    deleteIconBtn: [
+      {
+        value: deleteIcon,
+        type: 'button',
+        className: 'addedQuestion-button',
         onClick: handleCancel
       }
     ]
@@ -223,32 +242,31 @@ const NewSurveyPage = props => {
   });
 
   const sHead = () => {
+    let headerInfo;
     if (surveyState.name) {
-      return (
-        <>
-          <div className="header-wrapper">
-            <h3>Новый опрос:</h3>
-            <h2>{surveyState.name}</h2>
-          </div>
-          <div className="header-wrapper-btns">{surveyBtns}</div>
-        </>
-      );
+      headerInfo = <h2>{surveyState.name}</h2>;
     } else {
-      return (
-        <div className="header-wrapper">
-          <h3>Новый опрос:</h3>
-          <Input
-            value={inputText[surveyState.id]}
-            onChange={handleInput}
-            onSubmit={handleInputSubmit}
-            id={surveyState.id}
-            placeholder="введите название опроса"
-            type="text"
-            className={`${surveyState.id}-input`}
-          />
-        </div>
+      headerInfo = (
+        <Input
+          value={inputText[surveyState.id]}
+          onChange={handleInput}
+          onSubmit={handleInputSubmit}
+          id={surveyState.id}
+          placeholder="введите название опроса"
+          type="text"
+          className={`${surveyState.id}-input`}
+        />
       );
     }
+    return (
+      <>
+        <div className="header-wrapper">
+          <h3>Новый опрос:</h3>
+          {headerInfo}
+        </div>
+        <div className="header-wrapper-btns">{surveyBtns}</div>
+      </>
+    );
   };
 
   const addedQuestions = surveyState.pages[pageState]?.map((q, i) => {
@@ -257,7 +275,8 @@ const NewSurveyPage = props => {
         newQuestionInfo={q}
         key={i}
         className="question-saved"
-      />
+        btns={buttonsData.correctIconBtn}
+      ></NewSurveyQuestionForm>
     );
   });
 
