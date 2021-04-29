@@ -97,7 +97,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.ts', '.json', '.png', '.jpg', ',sass'],
+    extensions: ['.js', '.jsx', '.ts', '.json', '.png', '.jpg', ',sass', 'svg'],
     alias: {
       '~': PATHS.src,
       '@': `${PATHS.src}/js`

@@ -276,7 +276,7 @@ const NewSurveyPage = props => {
         key={i}
         className="question-saved"
         btns={buttonsData.correctIconBtn}
-      ></NewSurveyQuestionForm>
+      />
     );
   });
 
