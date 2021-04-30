@@ -12,6 +12,7 @@ import correctLogoSrc from '~/assets/icons/correct.svg';
 import deleteLogoSrc from '~/assets/icons/delete.svg';
 
 const NewSurveyPage = props => {
+  console.log(props);
   const correctIcon = <img src={correctLogoSrc} alt="correct" />;
   const deleteIcon = <img src={deleteLogoSrc} alt="delete" />;
 
@@ -32,7 +33,9 @@ const NewSurveyPage = props => {
 
   const initPageIndex = 0;
 
-  const [surveyState, updateSurveyState] = useState(initSurveyState);
+  const [surveyState, updateSurveyState] = useState(
+    props.location?.state.data ? props.location.state.data : initSurveyState
+  );
   const [pageState, updatePageNum] = useState(initPageIndex);
   const [questionState, updateQuestionState] = useState({});
   const [inputText, updateInputText] = useState({});
@@ -298,10 +301,9 @@ const NewSurveyPage = props => {
     </div>
   ) : null;
 
-  const handlePageClick = e => {
+  const handlePageClick = i => e => {
     e.preventDefault();
-    const pageIndex = +e.target.innerText.split(' ')[1] - 1;
-    updatePageNum(pageIndex);
+    updatePageNum(i);
   };
 
   const pageBtns = surveyState.pages?.map((p, i) => {
@@ -314,7 +316,7 @@ const NewSurveyPage = props => {
         className={pageBtnClass}
         key={i}
         value={`Cтраница ${i + 1}`}
-        onClick={handlePageClick}
+        onClick={handlePageClick(i)}
       />
     );
   });

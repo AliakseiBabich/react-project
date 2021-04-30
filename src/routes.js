@@ -47,7 +47,6 @@ const useRoutes = props => {
               <Navigation />
               <NewSurveyPage
                 surveyParameters={props.inputs.newSurveyParamTypes}
-                surveyQuestionTypes={props.inputs.newSurveyQuestionTypes}
               />
             </>
           )}

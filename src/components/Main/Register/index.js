@@ -32,7 +32,6 @@ const RegisterForm = () => {
       password,
       confirmPassword
     } = registerState;
-    notificationConfig.type = 'warning';
     if (!firstname || !lastname || !email || !password || !confirmPassword) {
       showNotification({
         type: 'warning',

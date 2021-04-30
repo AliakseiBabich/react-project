@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import Button from '../Button';
+import { Link, NavLink } from 'react-router-dom';
 
 const DraftsPage = () => {
   const draftsPageClass = classNames('drafts-page');
@@ -13,7 +14,9 @@ const DraftsPage = () => {
     const questionsNumber = draft.pages?.reduce((acc, page) => {
       return (acc += page.length);
     }, 0);
-    console.log(questionsNumber);
+    const handleSurveyCreate = e => {
+      e.preventDefault();
+    };
     return (
       <div className={`${draftsPageClass}__item`} key={i}>
         <h4 className={`${draftsPageClass}__item__header`}>{`Шаблон ${
@@ -27,11 +30,20 @@ const DraftsPage = () => {
             {`Страниц: ${pagesNumber}`}
           </span>
         </div>
-        <Button
+        <Link
+          to={{
+            pathname: '/home/new_survey',
+            className: `${draftsPageClass}__item__btn`,
+            state: { data: draft }
+          }}
+        >
+          создать опрос
+        </Link>
+        {/* <Button
           type="submit"
           value="создать опрос"
           className={`${draftsPageClass}__item__btn`}
-        />
+        /> */}
       </div>
     );
   });
