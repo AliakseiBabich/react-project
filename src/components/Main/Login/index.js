@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import Form from '../Form';
 import { LOGIN_INPUTS as loginInputs } from '~/constants/constants';
-import { store as notificationsStore } from 'react-notifications-component';
-import { NOTIFICATION_CONFIG as notificationConfig } from '~/constants/constants';
+import { showNotification } from '~/helpers';
 
 const Login = props => {
   const initLoginstate = {
@@ -24,16 +23,19 @@ const Login = props => {
   const handleLogin = e => {
     e.preventDefault();
     const { email, password } = loginState;
-    notificationConfig.type = 'warning';
     if (!email || !password) {
-      notificationConfig.message = 'Пожалуйста, заполните все поля в форме';
-      notificationsStore.addNotification(notificationConfig);
+      showNotification({
+        type: 'warning',
+        message: 'Пожалуйста, заполните все поля в форме'
+      });
     } else {
       const users = JSON.parse(localStorage.getItem('users'));
       if (!users) {
-        notificationConfig.message =
-          'Пользователя с таким email не существует, пожалуйста зарегистрируйтесь';
-        notificationsStore.addNotification(notificationConfig);
+        showNotification({
+          type: 'warning',
+          message:
+            'Пользователя с таким email не существует, пожалуйста зарегистрируйтесь'
+        });
       }
       users?.map(user => {
         if (user.email === email) {
@@ -41,18 +43,23 @@ const Login = props => {
             const auth = { isAuthenticated: true };
             props.handleAuth(auth);
             localStorage.setItem('auth', JSON.stringify(auth));
-            notificationConfig.type = 'success';
-            notificationConfig.message = 'Вы успешно вошли в систему';
-            notificationsStore.addNotification(notificationConfig);
+            showNotification({
+              type: 'success',
+              message: 'Вы успешно вошли в систему'
+            });
           } else {
-            notificationConfig.message =
-              'Введен неправильный пароль, пожалуйста, попробуйте снова';
-            notificationsStore.addNotification(notificationConfig);
+            showNotification({
+              type: 'error',
+              message:
+                'Введен неправильный пароль, пожалуйста, попробуйте снова'
+            });
           }
         } else {
-          notificationConfig.message =
-            'Пользователя с таким email не существует, пожалуйста зарегистрируйтесь';
-          notificationsStore.addNotification(notificationConfig);
+          showNotification({
+            type: 'warning',
+            message:
+              'Пользователя с таким email не существует, пожалуйста зарегистрируйтесь'
+          });
         }
       });
     }

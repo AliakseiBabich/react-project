@@ -1,9 +1,12 @@
 {
+  "homepage": "http://AliakseiBabich.github.io/react-project",
   "name": "react_project",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "dev": "webpack serve --open --config ./webpack/webpack.dev.config.js",
     "build": "webpack --config ./webpack/webpack.build.config.js",
     "lint": "eslint fix ./src/**/*.js"
@@ -42,6 +45,7 @@
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "4.3.1",
     "file-loader": "6.2.0",
+    "gh-pages": "3.1.0",
     "html-loader": "2.1.2",
     "html-webpack-plugin": "5.3.1",
     "less": "4.1.1",

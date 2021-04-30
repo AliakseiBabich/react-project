@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import Form from '../Form';
 import { REGISTER_INPUTS as registerInputs } from '~/constants/constants';
-import { store as notificationsStore } from 'react-notifications-component';
-import { NOTIFICATION_CONFIG as notificationConfig } from '~/constants/constants';
 import cloneDeep from 'lodash/cloneDeep';
+import { showNotification } from '~/helpers';
 
 const RegisterForm = () => {
   const initRegisterState = {
@@ -33,16 +32,18 @@ const RegisterForm = () => {
       password,
       confirmPassword
     } = registerState;
-    notificationConfig.type = 'warning';
     if (!firstname || !lastname || !email || !password || !confirmPassword) {
-      notificationConfig.message =
-        'Пожалуйста, заполните все поля в форме регистрации';
-      notificationsStore.addNotification(notificationConfig);
+      showNotification({
+        type: 'warning',
+        message: 'Пожалуйста, заполните все поля в форме регистрации'
+      });
     } else {
       if (password !== confirmPassword) {
-        notificationConfig.message =
-          'Введенные пароли не совпадают, пожалуйста, попробуйте ещё раз';
-        notificationsStore.addNotification(notificationConfig);
+        showNotification({
+          type: 'error',
+          message:
+            'Введенные пароли не совпадают, пожалуйста, попробуйте ещё раз'
+        });
       } else {
         const user = cloneDeep(registerState);
         user.name = `${user.firstname} ${user.lastname}`;
@@ -56,9 +57,10 @@ const RegisterForm = () => {
           : [];
         usersList.push(user);
         localStorage.setItem('users', JSON.stringify(usersList));
-        notificationConfig.type = 'success';
-        notificationConfig.message = `пользователь ${registerState.email} успешно зарегистрирован`;
-        notificationsStore.addNotification(notificationConfig);
+        showNotification({
+          type: 'success',
+          message: `пользователь ${registerState.email} успешно зарегистрирован`
+        });
       }
     }
   };
