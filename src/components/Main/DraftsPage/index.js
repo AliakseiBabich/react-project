@@ -1,9 +1,10 @@
 import React from 'react';
 import classNames from 'classnames';
 import Button from '../Button';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 const DraftsPage = () => {
+  const history = useHistory();
   const draftsPageClass = classNames('drafts-page');
 
   const drafts = (localStorage.getItem('drafts')
@@ -14,8 +15,10 @@ const DraftsPage = () => {
     const questionsNumber = draft.pages?.reduce((acc, page) => {
       return (acc += page.length);
     }, 0);
-    const handleSurveyCreate = e => {
+    const handleSurveyCreateClick = e => {
       e.preventDefault();
+      let path = `/home/new_survey/${draft.id}`;
+      history.push({ pathname: path, state: draft });
     };
     return (
       <div className={`${draftsPageClass}__item`} key={i}>
@@ -30,7 +33,7 @@ const DraftsPage = () => {
             {`Страниц: ${pagesNumber}`}
           </span>
         </div>
-        <Link
+        {/* <Link
           to={{
             pathname: '/home/new_survey',
             className: `${draftsPageClass}__item__btn`,
@@ -38,12 +41,13 @@ const DraftsPage = () => {
           }}
         >
           создать опрос
-        </Link>
-        {/* <Button
+        </Link> */}
+        <Button
           type="submit"
           value="создать опрос"
+          onClick={handleSurveyCreateClick}
           className={`${draftsPageClass}__item__btn`}
-        /> */}
+        />
       </div>
     );
   });

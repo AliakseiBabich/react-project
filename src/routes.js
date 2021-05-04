@@ -67,6 +67,35 @@ const useRoutes = props => {
       </Switch>
     );
   }
+  if (props.authState.isRegistered) {
+    return (
+      <Switch>
+        {mainText()}
+        <Redirect from="/register" to="/login" />
+        <Route exact path="/about" render={() => <About />} />
+        <Route
+          path="/login"
+          render={() => (
+            <Login
+              loginInputs={props.inputs.login}
+              authState={props.authState}
+              handleAuth={props.handleAuth}
+            />
+          )}
+        />
+        <Route
+          path="/register"
+          render={() => (
+            <RegisterForm
+              registerInputs={props.inputs.register}
+              authState={props.authState}
+              handleAuth={props.handleAuth}
+            />
+          )}
+        />
+      </Switch>
+    );
+  }
   return (
     <Switch>
       {mainText()}
@@ -83,9 +112,15 @@ const useRoutes = props => {
       />
       <Route
         path="/register"
-        render={() => <RegisterForm registerInputs={props.inputs.register} />}
+        render={() => (
+          <RegisterForm
+            registerInputs={props.inputs.register}
+            authState={props.authState}
+            handleAuth={props.handleAuth}
+          />
+        )}
       />
-      <Redirect from="login" to="/register" />
+      <Redirect from="/login" to="/register" />
     </Switch>
   );
 };

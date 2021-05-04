@@ -10,9 +10,10 @@ import { newSurveyQuestionTypes } from '~/constants/constants';
 import { showNotification } from '~/helpers';
 import correctLogoSrc from '~/assets/icons/correct.svg';
 import deleteLogoSrc from '~/assets/icons/delete.svg';
+import { useLocation } from 'react-router-dom';
 
 const NewSurveyPage = props => {
-  console.log(props);
+  const location = useLocation();
   const correctIcon = <img src={correctLogoSrc} alt="correct" />;
   const deleteIcon = <img src={deleteLogoSrc} alt="delete" />;
 
@@ -34,7 +35,7 @@ const NewSurveyPage = props => {
   const initPageIndex = 0;
 
   const [surveyState, updateSurveyState] = useState(
-    props.location?.state.data ? props.location.state.data : initSurveyState
+    location?.state ? location.state : initSurveyState
   );
   const [pageState, updatePageNum] = useState(initPageIndex);
   const [questionState, updateQuestionState] = useState({});
@@ -43,6 +44,12 @@ const NewSurveyPage = props => {
   const handleQuestionTypeClick = e => {
     e.preventDefault();
     let question = cloneDeep(questionState);
+    if (Object.keys(question).length) {
+      return showNotification({
+        type: 'warning',
+        message: 'Сохраните вопрос или нажмите отмена для выбора нового'
+      });
+    }
     const survey = cloneDeep(surveyState);
     if (!survey.pages.length) {
       const newPage = [];
@@ -66,7 +73,6 @@ const NewSurveyPage = props => {
 
   const handleInputSubmit = e => {
     if (e.key === 'Enter' && e.target.value) {
-      console.log(e.target);
       e.preventDefault();
       const question = cloneDeep(questionState);
       const survey = cloneDeep(surveyState);

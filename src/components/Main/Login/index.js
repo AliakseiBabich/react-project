@@ -37,31 +37,31 @@ const Login = props => {
             'Пользователя с таким email не существует, пожалуйста зарегистрируйтесь'
         });
       }
-      users?.map(user => {
-        if (user.email === email) {
-          if (user.password === password) {
-            const auth = { isAuthenticated: true };
-            props.handleAuth(auth);
-            localStorage.setItem('auth', JSON.stringify(auth));
-            showNotification({
-              type: 'success',
-              message: 'Вы успешно вошли в систему'
-            });
-          } else {
-            showNotification({
-              type: 'error',
-              message:
-                'Введен неправильный пароль, пожалуйста, попробуйте снова'
-            });
-          }
+      const user = users?.find(u => {
+        return u.email === email ? u : false;
+      });
+      if (!user) {
+        showNotification({
+          type: 'warning',
+          message:
+            'Пользователя с таким email не существует, пожалуйста зарегистрируйтесь'
+        });
+      } else {
+        if (user.password === password) {
+          const auth = { isAuthenticated: true };
+          props.handleAuth(auth);
+          localStorage.setItem('auth', JSON.stringify(auth));
+          showNotification({
+            type: 'success',
+            message: 'Вы успешно вошли в систему'
+          });
         } else {
           showNotification({
             type: 'warning',
-            message:
-              'Пользователя с таким email не существует, пожалуйста зарегистрируйтесь'
+            message: 'Введен неправильный пароль, пожалуйста, попробуйте снова'
           });
         }
-      });
+      }
     }
   };
 

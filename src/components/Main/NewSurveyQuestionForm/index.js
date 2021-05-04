@@ -15,14 +15,15 @@ const NewSurveyQuestionForm = props => {
       props.newQuestionInfo.answers?.map((a, i) => {
         const id = i + 1;
         answers.push(
-          <div key={id} className={`${questionFormClass}-answer-wrapper`}>
+          <p key={id} className={`${questionFormClass}-answer-wrapper`}>
             <Input
               type={type}
-              id={id}
+              id={`${type}-${id}`}
+              name={type}
               className={`${questionFormClass}-${type}-input`}
             />
             <label htmlFor={id}>{a.answer}</label>
-          </div>
+          </p>
         );
       });
       if (questionFormClass !== 'question-saved') {

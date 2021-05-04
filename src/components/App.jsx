@@ -6,7 +6,7 @@ import Main from './Main/Main';
 import Footer from './Footer/Footer';
 
 const App = props => {
-  const initAuthState = { isAuthenticated: false };
+  const initAuthState = { isAuthenticated: false, isRegistered: false };
   const [authState, setAuth] = useState(initAuthState);
 
   return (

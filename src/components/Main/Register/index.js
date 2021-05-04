@@ -4,7 +4,7 @@ import { REGISTER_INPUTS as registerInputs } from '~/constants/constants';
 import cloneDeep from 'lodash/cloneDeep';
 import { showNotification } from '~/helpers';
 
-const RegisterForm = () => {
+const RegisterForm = props => {
   const initRegisterState = {
     firstname: '',
     lastname: '',
@@ -32,35 +32,49 @@ const RegisterForm = () => {
       password,
       confirmPassword
     } = registerState;
+    const usersList = localStorage.getItem('users')
+      ? JSON.parse(localStorage.getItem('users'))
+      : [];
+    const registeredUserEmail = usersList.find(u => {
+      return u.email === email;
+    });
     if (!firstname || !lastname || !email || !password || !confirmPassword) {
       showNotification({
         type: 'warning',
         message: 'Пожалуйста, заполните все поля в форме регистрации'
       });
+    } else if (registeredUserEmail) {
+      showNotification({
+        type: 'warning',
+        message: 'Пользователь с таким email уже зарегистрирован'
+      });
     } else {
       if (password !== confirmPassword) {
         showNotification({
-          type: 'error',
+          type: 'warning',
           message:
             'Введенные пароли не совпадают, пожалуйста, попробуйте ещё раз'
         });
       } else {
         const user = cloneDeep(registerState);
         user.name = `${user.firstname} ${user.lastname}`;
-        user.role = 'admin';
+        if (!usersList.length) {
+          user.role = 'admin';
+        } else {
+          user.role = 'user';
+        }
         const date = new Date();
         user.registerDate = `${date.getDate()}.${
           date.getMonth() + 1
         }.${date.getFullYear()}`;
-        const usersList = localStorage.getItem('users')
-          ? JSON.parse(localStorage.getItem('users'))
-          : [];
         usersList.push(user);
         localStorage.setItem('users', JSON.stringify(usersList));
         showNotification({
           type: 'success',
           message: `пользователь ${registerState.email} успешно зарегистрирован`
         });
+        const isRegistered = { isRegistered: true };
+        props.handleAuth(isRegistered);
       }
     }
   };
