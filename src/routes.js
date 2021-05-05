@@ -11,6 +11,9 @@ import NewSurveyPage from './components/Main/NewSurveyPage';
 import DraftsPage from './components/Main/DraftsPage';
 
 const useRoutes = props => {
+  const logged = props.logged;
+  const userLogged = props.logged?.user;
+
   const mainText = () => {
     return (
       <Route
@@ -31,39 +34,56 @@ const useRoutes = props => {
     );
   };
 
-  if (localStorage.getItem('auth')) {
+  if (logged) {
+    if (userLogged?.role === 'admin') {
+      return (
+        <Switch>
+          {mainText()}
+          <Route exact path="/about" component={About} />
+          <Route exact path="/home">
+            <Navigation logged={logged} />
+            <Panel />
+          </Route>
+          <Route
+            path="/home/new_survey"
+            render={() => (
+              <>
+                <Navigation logged={logged} />
+                <NewSurveyPage
+                  surveyParameters={props.inputs.newSurveyParamTypes}
+                />
+              </>
+            )}
+          ></Route>
+          <Route path="/home/my_surveys">
+            <Navigation logged={logged} />
+            <MySurveysPage logged={logged} />
+          </Route>
+          <Route path="/home/drafts">
+            <Navigation logged={logged} />
+            <DraftsPage />
+          </Route>
+          <Route path="/home/users">
+            <Navigation logged={logged} />
+            <UsersPage mockupData={props.mockups.usersTableContentData} />
+          </Route>
+          <Redirect from="/login" to="/home" />
+        </Switch>
+      );
+    }
     return (
       <Switch>
         {mainText()}
         <Route exact path="/about" component={About} />
         <Route exact path="/home">
-          <Navigation />
+          <Navigation logged={logged} />
           <Panel />
         </Route>
-        <Route
-          path="/home/new_survey"
-          render={() => (
-            <>
-              <Navigation />
-              <NewSurveyPage
-                surveyParameters={props.inputs.newSurveyParamTypes}
-              />
-            </>
-          )}
-        ></Route>
         <Route path="/home/my_surveys">
-          <Navigation />
-          <MySurveysPage />
+          <Navigation logged={logged} />
+          <MySurveysPage logged={logged} />
         </Route>
-        <Route path="/home/drafts">
-          <Navigation />
-          <DraftsPage />
-        </Route>
-        <Route path="/home/users">
-          <Navigation />
-          <UsersPage mockupData={props.mockups.usersTableContentData} />
-        </Route>
-        <Redirect from="/login" to="/home" />
+        <Redirect from="/login" to="/home/my_surveys" />
       </Switch>
     );
   }

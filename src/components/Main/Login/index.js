@@ -48,7 +48,7 @@ const Login = props => {
         });
       } else {
         if (user.password === password) {
-          const auth = { isAuthenticated: true };
+          const auth = { isAuthenticated: true, user: user };
           props.handleAuth(auth);
           localStorage.setItem('auth', JSON.stringify(auth));
           showNotification({

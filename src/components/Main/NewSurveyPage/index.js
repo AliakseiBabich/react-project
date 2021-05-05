@@ -106,6 +106,8 @@ const NewSurveyPage = props => {
     } else {
       const survey = cloneDeep(surveyState);
       survey.id = nanoid();
+      survey.answersNumber = 0;
+      survey.surveyUrl = `/home/new_survey/${survey.id}`;
       const date = new Date();
       survey.saveDate = `${date.getDate()}.${
         date.getMonth() + 1
@@ -180,6 +182,10 @@ const NewSurveyPage = props => {
     updatePageNum(page);
   };
 
+  const handleQuestionCorrection = e => {
+    e.preventDefault();
+  };
+
   const buttonsData = {
     surveyBtns: [
       {
@@ -226,7 +232,7 @@ const NewSurveyPage = props => {
         value: correctIcon,
         type: 'button',
         className: 'addedQuestion-button',
-        onClick: handleCancel
+        onClick: handleQuestionCorrection
       }
     ],
     deleteIconBtn: [

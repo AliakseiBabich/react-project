@@ -3,14 +3,19 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 const Header = props => {
-  const linkTo =
-    props.authState.isAuthenticated || localStorage.getItem('auth')
+  const logged = props.logged;
+  const userLogged = props.logged?.user;
+
+  const linkTo = logged
+    ? userLogged.role === 'admin'
       ? '/home'
-      : '/login';
-  const linkText =
-    props.authState.isAuthenticated || localStorage.getItem('auth')
-      ? 'Привет, admin'
-      : 'Вход';
+      : '/home/my_surveys'
+    : '/login';
+  const linkText = logged
+    ? userLogged.role === 'admin'
+      ? `Привет, ${userLogged.role}`
+      : `Привет, ${userLogged.firstname}`
+    : 'Вход';
   return (
     <header className="header">
       <NavLink exact={true} to="/" className="header-logo">

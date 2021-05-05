@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useSort } from '../../../hooks/useSort';
 
 const Table = props => {
@@ -37,26 +38,48 @@ const Table = props => {
       ? items.map((c, i) => {
           let cells = [];
           if (typeof c === 'object') {
-            Object.entries(c).map((item, i) => {
-              switch (item[0]) {
-                case 'id':
-                case 'type':
-                case 'className':
-                case 'question':
-                  break;
-                case 'name':
-                  cells.push(
-                    <td key={i} onClick={props.onClick ? props.onClick : null}>
-                      {item[1]}
-                    </td>
-                  );
-                  break;
-                case 'role':
-                case 'registerDate':
-                case 'saveDate':
-                  cells.push(<td key={i}>{item[1]}</td>);
-                  break;
-              }
+            Object.keys(props.headerData).map(headerKey => {
+              Object.entries(c).map((item, i) => {
+                const itemKey = item[0];
+                const itemValue = item[1];
+                if (headerKey === itemKey) {
+                  switch (headerKey) {
+                    case 'name':
+                      cells.push(
+                        <td
+                          key={i}
+                          onClick={props.onClick ? props.onClick : null}
+                        >
+                          {itemValue}
+                        </td>
+                      );
+                      break;
+                    case 'role':
+                      cells.push(<td key={i}>{itemValue}</td>);
+                      break;
+                    case 'registerDate':
+                      cells.push(<td key={i}>{itemValue}</td>);
+                      break;
+                    case 'saveDate':
+                      cells.push(<td key={i}>{itemValue}</td>);
+                      break;
+                    case 'answersNumber':
+                      cells.push(<td key={i}></td>);
+                      break;
+                    case 'surveyUrl':
+                      cells.push(
+                        <td key={i}>
+                          <Link to={{ pathname: itemValue, state: c }}>
+                            ссылка на опрос
+                          </Link>
+                        </td>
+                      );
+                      break;
+                    default:
+                      break;
+                  }
+                }
+              });
             });
           } else {
             return (

@@ -124,13 +124,17 @@ export const TABLE_HEADERS = {
     surveys: 'Опросы',
     actions: 'Действия'
   },
-  mySurveysTable: {
+  mySurveysTableAdmin: {
     name: 'Название',
     saveDate: 'Изменен',
     answersNumber: 'Ответы',
     surveyUrl: 'Ссылка',
     resultUrl: 'Результаты',
     actions: 'Действия'
+  },
+  mySurveysTableUser: {
+    name: 'Название',
+    surveyUrl: 'Ссылка'
   }
 };
 

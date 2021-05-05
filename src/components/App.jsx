@@ -9,12 +9,15 @@ const App = props => {
   const initAuthState = { isAuthenticated: false, isRegistered: false };
   const [authState, setAuth] = useState(initAuthState);
 
+  const logged = JSON.parse(localStorage.getItem('auth'));
+
   return (
     <div className="app-wrapper">
-      <Header authState={authState} />
+      <Header logged={logged} />
       <Main
         authState={authState}
         handleAuth={setAuth}
+        logged={logged}
         inputs={props.inputs}
         tableHeaders={props.tableHeaders}
         mockups={props.mockups}
