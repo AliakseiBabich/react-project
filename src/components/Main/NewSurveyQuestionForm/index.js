@@ -20,6 +20,7 @@ const NewSurveyQuestionForm = props => {
               type={type}
               id={`${type}-${id}`}
               name={type}
+              onChange={props.onInputChange}
               className={`${questionFormClass}-${type}-input`}
             />
             <label htmlFor={id}>{a.answer}</label>
@@ -84,7 +85,7 @@ const NewSurveyQuestionForm = props => {
   const qHead = () => {
     if (props.newQuestionInfo.name) {
       return (
-        <h2 className="form-container-header">{props.newQuestionInfo.name}</h2>
+        <h2 className="form-container-header">{`${props.qNumber}. ${props.newQuestionInfo.name}`}</h2>
       );
     } else {
       return (

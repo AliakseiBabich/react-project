@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import Button from '../Button';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const DraftsPage = () => {
   const history = useHistory();
@@ -33,15 +33,6 @@ const DraftsPage = () => {
             {`Страниц: ${pagesNumber}`}
           </span>
         </div>
-        {/* <Link
-          to={{
-            pathname: '/home/new_survey',
-            className: `${draftsPageClass}__item__btn`,
-            state: { data: draft }
-          }}
-        >
-          создать опрос
-        </Link> */}
         <Button
           type="submit"
           value="создать опрос"

@@ -107,7 +107,7 @@ const NewSurveyPage = props => {
       const survey = cloneDeep(surveyState);
       survey.id = nanoid();
       survey.answersNumber = 0;
-      survey.surveyUrl = `/home/new_survey/${survey.id}`;
+      survey.surveyUrl = `/home/survey/${survey.id}`;
       const date = new Date();
       survey.saveDate = `${date.getDate()}.${
         date.getMonth() + 1
@@ -289,6 +289,7 @@ const NewSurveyPage = props => {
       <NewSurveyQuestionForm
         newQuestionInfo={q}
         key={i}
+        qNumber={i + 1}
         className="question-saved"
         btns={buttonsData.correctIconBtn}
       />

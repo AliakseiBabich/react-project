@@ -9,6 +9,7 @@ import UsersPage from './components/Main/UsersPage';
 import MySurveysPage from './components/Main/MySurveysPage';
 import NewSurveyPage from './components/Main/NewSurveyPage';
 import DraftsPage from './components/Main/DraftsPage';
+import SurveyPage from './components/Main/SurveyPage';
 
 const useRoutes = props => {
   const logged = props.logged;
@@ -67,6 +68,15 @@ const useRoutes = props => {
             <Navigation logged={logged} />
             <UsersPage mockupData={props.mockups.usersTableContentData} />
           </Route>
+          <Route
+          path="/home/survey"
+          render={() => (
+            <>
+              <Navigation logged={logged} />
+              <SurveyPage />
+            </>
+          )}
+        ></Route>
           <Redirect from="/login" to="/home" />
         </Switch>
       );
@@ -79,6 +89,15 @@ const useRoutes = props => {
           <Navigation logged={logged} />
           <Panel />
         </Route>
+        <Route
+          path="/home/survey"
+          render={() => (
+            <>
+              <Navigation logged={logged} />
+              <SurveyPage />
+            </>
+          )}
+        ></Route>
         <Route path="/home/my_surveys">
           <Navigation logged={logged} />
           <MySurveysPage logged={logged} />
