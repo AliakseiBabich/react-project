@@ -36,6 +36,7 @@ const Login = props => {
           message:
             'Пользователя с таким email не существует, пожалуйста зарегистрируйтесь'
         });
+        return;
       }
       const user = users?.find(u => {
         return u.email === email ? u : false;

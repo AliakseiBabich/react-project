@@ -5,8 +5,6 @@ import { NavLink } from 'react-router-dom';
 const Header = props => {
   const logged = props.logged;
   const userLogged = props.logged?.user;
-  console.log(logged);
-  console.log(userLogged);
 
   const linkTo = logged
     ? userLogged?.role === 'admin'
